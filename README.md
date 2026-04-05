@@ -21,6 +21,24 @@ types/
 public/
 ```
 
+## Instalacion
+
+Instala las dependencias del proyecto con:
+
+```bash
+npm install
+```
+
+## Desarrollo local
+
+Arranca el entorno de desarrollo con:
+
+```bash
+npm run dev
+```
+
+La aplicacion quedara disponible en `http://localhost:3000`.
+
 ## Variables de entorno
 
 Parte de `.env.example` y crea tu archivo `.env.local`:
@@ -29,17 +47,28 @@ Parte de `.env.example` y crea tu archivo `.env.local`:
 cp .env.example .env.local
 ```
 
-Variables necesarias:
+Variables disponibles en esta base:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `SUPABASE_SERVICE_ROLE_KEY`
 - `OPENAI_API_KEY`
 
-## Desarrollo
+Completa las que necesites segun la fase del proyecto. Para la integracion con Supabase, las dos variables `NEXT_PUBLIC_*` seran las primeras obligatorias.
+
+## Despliegue en Vercel
+
+1. Sube el repositorio a GitHub, GitLab o Bitbucket.
+2. Importa el proyecto en Vercel.
+3. Configura las mismas variables de entorno del archivo `.env.local` dentro del panel de Vercel.
+4. Ejecuta el despliegue.
+
+Vercel detectara automaticamente que se trata de un proyecto Next.js y utilizara la configuracion adecuada por defecto.
+
+Tambien puedes desplegarlo con la CLI de Vercel:
 
 ```bash
-npm run dev
+vercel
 ```
 
 ## Verificacion
