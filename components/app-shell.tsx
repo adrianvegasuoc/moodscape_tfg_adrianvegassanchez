@@ -1,6 +1,7 @@
 const sections = [
   { href: "/login", label: "Login", description: "Acceso de usuarios." },
-  { href: "/registro", label: "Registro", description: "Alta de nuevas cuentas." },
+  { href: "/register", label: "Registro", description: "Alta de nuevas cuentas." },
+  { href: "/dashboard", label: "Dashboard", description: "Zona privada del usuario autenticado." },
   { href: "/crear", label: "Crear", description: "Generacion de nuevas obras." },
   { href: "/explorar", label: "Explorar", description: "Descubrimiento de creaciones." },
   { href: "/perfil", label: "Perfil", description: "Espacio personal del usuario." }
@@ -15,7 +16,7 @@ export function AppShell() {
           Aplicacion web orientada a la expresion emocional mediante arte generativo basado en IA.
         </p>
         <p className="status-message">
-          El entorno base esta correctamente configurado y listo para extenderse.
+          El entorno base esta correctamente configurado y ahora incluye autenticacion basica.
         </p>
       </section>
 

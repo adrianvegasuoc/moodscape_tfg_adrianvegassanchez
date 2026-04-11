@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { getSupabaseEnv } from "@/lib/env";
 import type { Database } from "@/types/database";
 
+// Cliente server-side que comparte las cookies de la peticion actual.
 export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
   const env = getSupabaseEnv();
