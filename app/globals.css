@@ -33,6 +33,12 @@ textarea {
   font: inherit;
 }
 
+code {
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+  background: #efefef;
+}
+
 .page-shell {
   width: min(960px, calc(100% - 2rem));
   margin: 0 auto;
@@ -193,6 +199,78 @@ textarea {
   background: var(--surface);
 }
 
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.panel {
+  padding: 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.panel h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.25rem;
+}
+
+.form-field textarea {
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  resize: vertical;
+}
+
+.checkbox-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkbox-field input {
+  width: 1rem;
+  height: 1rem;
+}
+
+.posts-list {
+  display: grid;
+  gap: 1rem;
+  padding: 0;
+  margin: 1rem 0 0;
+  list-style: none;
+}
+
+.post-item {
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.post-item p {
+  margin: 0.75rem 0;
+  line-height: 1.6;
+}
+
+.post-item a {
+  color: #0d5cab;
+  word-break: break-word;
+}
+
+.post-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
 @media (max-width: 900px) {
   .route-grid {
     grid-template-columns: 1fr;
@@ -209,5 +287,14 @@ textarea {
   .dashboard-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .post-meta {
+    flex-direction: column;
+    gap: 0.35rem;
   }
 }
