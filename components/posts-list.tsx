@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import type { Post } from "@/types/posts";
 
 type PostsListProps = {
@@ -24,6 +26,16 @@ export function PostsList({ posts, errorMessage }: PostsListProps) {
                 <strong>{new Date(post.created_at).toLocaleString("es-ES")}</strong>
                 <span>{post.is_public ? "Publica" : "Privada"}</span>
               </div>
+              {post.image_url ? (
+                <Image
+                  alt={`Imagen generada para: ${post.prompt}`}
+                  className="post-image"
+                  height={1024}
+                  src={post.image_url}
+                  unoptimized
+                  width={1024}
+                />
+              ) : null}
               <p>{post.prompt}</p>
               {post.image_url ? (
                 <a href={post.image_url} rel="noreferrer" target="_blank">

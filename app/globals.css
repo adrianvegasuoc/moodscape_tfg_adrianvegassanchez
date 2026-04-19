@@ -253,6 +253,25 @@ code {
   background: #ffffff;
 }
 
+.post-image,
+.generated-image {
+  width: 100%;
+  height: auto;
+  margin-top: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #ffffff;
+  object-fit: cover;
+}
+
+.generated-image {
+  max-height: 32rem;
+}
+
+.post-image {
+  max-height: 12rem;
+}
+
 .post-item p {
   margin: 0.75rem 0;
   line-height: 1.6;

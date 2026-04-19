@@ -1,5 +1,6 @@
 import { DashboardHeader } from "@/components/dashboard-header";
-import { PostForm } from "@/components/post-form";
+import { GeneratedImageResult } from "@/components/generated-image-result";
+import { ImageGenerationForm } from "@/components/image-generation-form";
 import { PostsList } from "@/components/posts-list";
 import { requireAuthenticatedUser } from "@/lib/supabase/auth";
 import { getUserPosts } from "@/lib/supabase/posts";
@@ -7,6 +8,7 @@ import type { Post } from "@/types/posts";
 
 type DashboardPageProps = {
   searchParams: Promise<{
+    generated_post_id?: string;
     message?: string;
     type?: string;
   }>;
@@ -30,6 +32,10 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       error instanceof Error ? error.message : "No se pudieron cargar las publicaciones.";
   }
 
+  const generatedPost = params.generated_post_id
+    ? posts.find((post) => post.id === params.generated_post_id)
+    : undefined;
+
   return (
     <main className="page-shell">
       {/* Header minimo con email del usuario y accion de cierre de sesion. */}
@@ -38,14 +44,16 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
       <section className="landing">
         <h1>Dashboard</h1>
         <p>
-          Esta es la zona protegida de Moodscape. Desde aqui puedes crear una publicacion de
-          prueba y leer tus filas reales de <code>public.posts</code>.
+          Esta es la zona protegida de Moodscape. Desde aqui puedes generar una imagen con
+          OpenAI, guardarla en Supabase Storage y persistir su URL en <code>public.posts</code>.
         </p>
       </section>
 
+      {generatedPost ? <GeneratedImageResult post={generatedPost} /> : null}
+
       {/* Separamos formulario y listado para mantener el dashboard simple y modular. */}
       <div className="dashboard-grid">
-        <PostForm message={params.message} type={params.type} />
+        <ImageGenerationForm message={params.message} type={params.type} />
         <PostsList errorMessage={postsError} posts={posts} />
       </div>
     </main>

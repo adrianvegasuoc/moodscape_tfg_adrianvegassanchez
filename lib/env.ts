@@ -32,3 +32,11 @@ export function getServiceRoleKey() {
 export function getOpenAiApiKey() {
   return getEnv("OPENAI_API_KEY", process.env.OPENAI_API_KEY);
 }
+
+export function getOpenAiImageModel() {
+  return process.env.OPENAI_IMAGE_MODEL || "gpt-image-1";
+}
+
+export function isOpenAiMockMode() {
+  return process.env.OPENAI_MOCK_MODE === "true";
+}

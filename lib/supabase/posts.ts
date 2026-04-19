@@ -36,7 +36,7 @@ export async function createUserPost(
   supabase: AuthenticatedSupabaseClient,
   user: User,
   input: CreatePostInput
-): Promise<void> {
+): Promise<Post> {
   // Construimos la fila completa en servidor para no depender de campos ocultos en cliente.
   const payload: InsertPost = {
     id: crypto.randomUUID(),
@@ -48,9 +48,11 @@ export async function createUserPost(
   };
 
   // La insercion usa el cliente autenticado del usuario, por lo que sigue sometida a RLS.
-  const { error } = await supabase.from("posts").insert(payload);
+  const { data, error } = await supabase.from("posts").insert(payload).select("*").single();
 
   if (error) {
     throw new Error(error.message);
   }
+
+  return data;
 }
