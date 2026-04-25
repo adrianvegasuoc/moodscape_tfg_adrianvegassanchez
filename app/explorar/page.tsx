@@ -1,10 +1,19 @@
-import { SectionPlaceholder } from "@/components/section-placeholder";
+import { ExploreOverview } from "@/components/explore-views";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { buildTrendingTerms, getPostsByPromptTerm, getPublicPosts } from "@/lib/supabase/posts";
 
-export default function ExplorarPage() {
-  return (
-    <SectionPlaceholder
-      title="Explorar"
-      description="Pantalla inicial reservada para descubrir creaciones y categorias."
-    />
-  );
+export default async function ExplorarPage() {
+  const supabase = await createServerSupabaseClient();
+  const publicPosts = await getPublicPosts(supabase, 80);
+  const trendTerms = buildTrendingTerms(publicPosts, 6);
+  const trends = (
+    await Promise.all(
+      trendTerms.map(async (term) => ({
+        term,
+        posts: await getPostsByPromptTerm(supabase, term, undefined, 6)
+      }))
+    )
+  ).filter((trend) => trend.posts.length > 0);
+
+  return <ExploreOverview trends={trends} />;
 }

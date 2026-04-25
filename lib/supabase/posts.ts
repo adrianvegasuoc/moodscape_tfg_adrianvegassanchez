@@ -56,6 +56,25 @@ export async function getUserPosts(
   return data ?? [];
 }
 
+export async function getPublicPosts(
+  supabase: AuthenticatedSupabaseClient,
+  limit = 60
+): Promise<Post[]> {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("is_public", true)
+    .not("image_url", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ?? [];
+}
+
 export async function createUserPost(
   supabase: AuthenticatedSupabaseClient,
   user: User,
@@ -106,6 +125,21 @@ export function extractPromptTerms(prompt: string, limit = 3) {
   }
 
   return Array.from(uniqueTerms);
+}
+
+export function buildTrendingTerms(posts: Post[], limit = 6) {
+  const counts = new Map<string, number>();
+
+  posts.forEach((post) => {
+    extractPromptTerms(post.prompt, 4).forEach((term) => {
+      counts.set(term, (counts.get(term) ?? 0) + 1);
+    });
+  });
+
+  return Array.from(counts.entries())
+    .sort((left, right) => right[1] - left[1])
+    .slice(0, limit)
+    .map(([term]) => term);
 }
 
 export async function getPostsByPromptTerm(

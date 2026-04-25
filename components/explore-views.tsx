@@ -1,0 +1,147 @@
+import Image from "next/image";
+import Link from "next/link";
+import type { Route } from "next";
+
+import type { Post } from "@/types/posts";
+
+type ExploreTrend = {
+  posts: Post[];
+  term: string;
+};
+
+type ExploreOverviewProps = {
+  trends: ExploreTrend[];
+};
+
+type ExploreDetailProps = {
+  currentTerm: string;
+  posts: Post[];
+  trends: string[];
+};
+
+function formatTrendLabel(term: string) {
+  return `#${term.toUpperCase()}`;
+}
+
+function buildExploreTermHref(term: string) {
+  return `/explorar/${encodeURIComponent(term)}` as Route;
+}
+
+export function ExploreOverview({ trends }: ExploreOverviewProps) {
+  const heroTrends = trends.slice(0, 3);
+  const secondaryTrends = trends.slice(3, 5);
+  const trendTerms = trends.slice(0, 6).map((trend) => trend.term);
+
+  return (
+    <main className="page-shell explore-page">
+      {heroTrends.length > 0 ? (
+        <section className="explore-panel explore-hero-panel">
+          <h1>Tendencia ahora mismo</h1>
+          <div className="trend-hero-grid">
+            {heroTrends.map((trend) => {
+              const featuredPost = trend.posts[0];
+
+              if (!featuredPost?.image_url) {
+                return null;
+              }
+
+              return (
+                <Link className="trend-hero-card" href={buildExploreTermHref(trend.term)} key={trend.term}>
+                  <Image
+                    alt={`Tendencia ${trend.term}`}
+                    className="trend-hero-image"
+                    height={420}
+                    src={featuredPost.image_url}
+                    unoptimized
+                    width={420}
+                  />
+                  <span className="trend-hero-label">{formatTrendLabel(trend.term)}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
+
+      {secondaryTrends.length > 0 ? (
+        <section className="explore-secondary-grid">
+          {secondaryTrends.map((trend) => (
+            <article className="explore-strip" key={trend.term}>
+              <p>{formatTrendLabel(trend.term)}</p>
+              <div className="explore-strip-images">
+                {trend.posts.slice(0, 3).map((post) =>
+                  post.image_url ? (
+                    <Link href={buildExploreTermHref(trend.term)} key={post.id}>
+                      <Image
+                        alt={`Imagen relacionada con ${trend.term}`}
+                        className="explore-strip-image"
+                        height={180}
+                        src={post.image_url}
+                        unoptimized
+                        width={180}
+                      />
+                    </Link>
+                  ) : null
+                )}
+              </div>
+            </article>
+          ))}
+        </section>
+      ) : null}
+
+      {trendTerms.length > 0 ? (
+        <section className="explore-panel trend-tags-panel">
+          <p>Tendencias</p>
+          <div className="trend-tag-grid">
+            {trendTerms.map((term) => (
+              <Link className="trend-tag-card" href={buildExploreTermHref(term)} key={term}>
+                {formatTrendLabel(term)}
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
+    </main>
+  );
+}
+
+export function ExploreDetail({ currentTerm, posts, trends }: ExploreDetailProps) {
+  return (
+    <main className="page-shell explore-page">
+      <section className="explore-panel explore-detail-panel">
+        <p className="explore-detail-title">{currentTerm}</p>
+        <div className="explore-detail-grid">
+          {posts.map((post) =>
+            post.image_url ? (
+              <Image
+                alt={`Imagen relacionada con ${currentTerm}`}
+                className="explore-detail-image"
+                height={220}
+                key={post.id}
+                src={post.image_url}
+                unoptimized
+                width={220}
+              />
+            ) : null
+          )}
+        </div>
+        <button className="more-chip-button explore-more-button" type="button">
+          Ver más
+        </button>
+      </section>
+
+      {trends.length > 0 ? (
+        <section className="explore-panel trend-tags-panel">
+          <p>Tendencias</p>
+          <div className="trend-tag-grid">
+            {trends.map((term) => (
+              <Link className="trend-tag-card" href={buildExploreTermHref(term)} key={term}>
+                {formatTrendLabel(term)}
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
+    </main>
+  );
+}
