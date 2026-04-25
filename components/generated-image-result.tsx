@@ -2,10 +2,15 @@ import Image from "next/image";
 
 import type { Post } from "@/types/posts";
 
+type RelatedRow = {
+  posts: Post[];
+  title: string;
+};
+
 type GeneratedImageResultProps = {
   authorLabel: string;
   post: Post;
-  relatedPosts: Post[];
+  relatedRows: RelatedRow[];
 };
 
 function buildTags(prompt: string) {
@@ -13,13 +18,13 @@ function buildTags(prompt: string) {
     .split(/[\s,.;:!?]+/)
     .map((word) => word.trim())
     .filter((word) => word.length > 3)
-    .slice(0, 4);
+    .slice(0, 8);
 
   return words.map((word) => `#${word.replace(/[^\p{L}\p{N}]/gu, "")}`).filter(Boolean);
 }
 
 // Este bloque destaca el resultado mas reciente de generacion para que el usuario vea el flujo completo.
-export function GeneratedImageResult({ post, relatedPosts, authorLabel }: GeneratedImageResultProps) {
+export function GeneratedImageResult({ post, relatedRows, authorLabel }: GeneratedImageResultProps) {
   if (!post.image_url) {
     return null;
   }
@@ -48,35 +53,33 @@ export function GeneratedImageResult({ post, relatedPosts, authorLabel }: Genera
         </div>
       </article>
 
-      {relatedPosts.length > 0 ? (
+      {relatedRows.length > 0 ? (
         <section className="related-gallery">
           <div className="related-header">
             <strong>Explora imágenes relacionadas con tu creación</strong>
-            <span aria-hidden="true">▾</span>
           </div>
 
-          <div className="related-section">
-            <p>Más sobre esta atmósfera</p>
-            <div className="related-grid">
-              {relatedPosts.map((item) =>
-                item.image_url ? (
-                  <Image
-                    alt={`Referencia visual para: ${item.prompt}`}
-                    className="related-image"
-                    height={320}
-                    key={item.id}
-                    src={item.image_url}
-                    unoptimized
-                    width={320}
-                  />
-                ) : null
-              )}
+          {relatedRows.map((row) => (
+            <div className="related-section" key={row.title}>
+              <p>{row.title}</p>
+              <div className="related-grid">
+                {row.posts.map((item) =>
+                  item.image_url ? (
+                    <Image
+                      alt={`Referencia visual para: ${item.prompt}`}
+                      className="related-image"
+                      height={320}
+                      key={item.id}
+                      src={item.image_url}
+                      unoptimized
+                      width={320}
+                    />
+                  ) : null
+                )}
+              </div>
             </div>
-          </div>
+          ))}
 
-          <button className="more-chip-button" type="button">
-            Ver más
-          </button>
         </section>
       ) : null}
     </section>

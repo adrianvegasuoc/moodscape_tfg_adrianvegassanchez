@@ -13,6 +13,30 @@ type CreatePostInput = {
   isPublic: boolean;
 };
 
+const STOP_WORDS = new Set([
+  "ante",
+  "bajo",
+  "cabe",
+  "como",
+  "con",
+  "contra",
+  "desde",
+  "donde",
+  "entre",
+  "feliz",
+  "hacia",
+  "hasta",
+  "para",
+  "pero",
+  "pueblo",
+  "segun",
+  "sobre",
+  "tras",
+  "unas",
+  "unos",
+  "viaje"
+]);
+
 // Estas utilidades encapsulan el acceso a public.posts usando el usuario autenticado real.
 export async function getUserPosts(
   supabase: AuthenticatedSupabaseClient,
@@ -55,4 +79,58 @@ export async function createUserPost(
   }
 
   return data;
+}
+
+function normalizePromptWord(word: string) {
+  return word
+    .toLocaleLowerCase("es-ES")
+    .replace(/[^\p{L}\p{N}]/gu, "")
+    .trim();
+}
+
+export function extractPromptTerms(prompt: string, limit = 3) {
+  const uniqueTerms = new Set<string>();
+
+  for (const word of prompt.split(/[\s,.;:!?]+/)) {
+    const normalizedWord = normalizePromptWord(word);
+
+    if (normalizedWord.length < 4 || STOP_WORDS.has(normalizedWord)) {
+      continue;
+    }
+
+    uniqueTerms.add(normalizedWord);
+
+    if (uniqueTerms.size >= limit) {
+      break;
+    }
+  }
+
+  return Array.from(uniqueTerms);
+}
+
+export async function getPostsByPromptTerm(
+  supabase: AuthenticatedSupabaseClient,
+  term: string,
+  excludePostId?: string,
+  limit = 6
+): Promise<Post[]> {
+  let query = supabase
+    .from("posts")
+    .select("*")
+    .ilike("prompt", `%${term}%`)
+    .not("image_url", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (excludePostId) {
+    query = query.neq("id", excludePostId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ?? [];
 }

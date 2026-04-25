@@ -1,7 +1,7 @@
 import { GeneratedImageResult } from "@/components/generated-image-result";
 import { ImageGenerationForm } from "@/components/image-generation-form";
 import { requireAuthenticatedUser } from "@/lib/supabase/auth";
-import { getUserPosts } from "@/lib/supabase/posts";
+import { extractPromptTerms, getPostsByPromptTerm, getUserPosts } from "@/lib/supabase/posts";
 import type { Post } from "@/types/posts";
 
 type DashboardPageProps = {
@@ -31,10 +31,27 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
   const generatedPost = params.generated_post_id
     ? posts.find((post) => post.id === params.generated_post_id)
     : undefined;
-  const relatedPosts = posts
-    .filter((post) => post.id !== generatedPost?.id && Boolean(post.image_url))
-    .slice(0, 12);
   const authorLabel = (user.email ?? "moodscape").split("@")[0];
+  const relatedRows =
+    generatedPost && generatedPost.prompt
+      ? (
+          await Promise.all(
+            extractPromptTerms(generatedPost.prompt).map(async (term) => {
+              const relatedPosts = await getPostsByPromptTerm(
+                supabase,
+                term,
+                generatedPost.id,
+                6
+              );
+
+              return {
+                title: `Inspirado en ${term}`,
+                posts: relatedPosts
+              };
+            })
+          )
+        ).filter((row) => row.posts.length > 0)
+      : [];
 
   return (
     <main className="page-shell dashboard-page">
@@ -42,7 +59,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
         <GeneratedImageResult
           authorLabel={authorLabel}
           post={generatedPost}
-          relatedPosts={relatedPosts}
+          relatedRows={relatedRows}
         />
       ) : (
         <ImageGenerationForm message={params.message} type={params.type} />

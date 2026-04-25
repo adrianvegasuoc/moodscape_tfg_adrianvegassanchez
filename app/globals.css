@@ -548,6 +548,8 @@ code {
   display: flex;
   flex-wrap: wrap;
   gap: 0.4rem;
+  max-width: 78%;
+  line-height: 1.45;
 }
 
 .result-author {
@@ -563,8 +565,6 @@ code {
 .related-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
   padding: 0.5rem 0.65rem;
   border-bottom: 1px solid #d9dce7;
   color: var(--foreground-strong);
@@ -713,6 +713,10 @@ code {
   .result-meta {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .result-tags {
+    max-width: 100%;
   }
 
   .result-card,
