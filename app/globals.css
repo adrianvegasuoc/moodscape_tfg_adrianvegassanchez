@@ -104,6 +104,68 @@ code {
   font-size: 0.9rem;
 }
 
+.user-menu {
+  position: relative;
+}
+
+.user-menu-trigger {
+  cursor: pointer;
+  list-style: none;
+}
+
+.user-menu-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.user-menu-trigger:focus-visible {
+  outline: 2px solid rgba(63, 65, 107, 0.28);
+  outline-offset: 0.25rem;
+  border-radius: 999px;
+}
+
+.user-menu-chevron {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.user-menu-panel {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  min-width: 11.5rem;
+  padding: 0.4rem;
+  border: 1px solid #ececf1;
+  border-radius: 0.8rem;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  z-index: 30;
+}
+
+.user-menu-panel form {
+  margin: 0;
+}
+
+.user-menu-item {
+  display: block;
+  width: 100%;
+  padding: 0.75rem 0.85rem;
+  border: 0;
+  border-radius: 0.55rem;
+  color: var(--foreground-strong);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: left;
+}
+
+.user-menu-item:hover {
+  background: var(--surface-soft);
+}
+
+.user-menu-button {
+  background: transparent;
+  cursor: pointer;
+}
+
 .user-name {
   padding-right: 0.85rem;
   border-right: 1px solid #e9e9f0;

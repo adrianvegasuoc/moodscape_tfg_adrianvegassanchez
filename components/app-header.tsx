@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Route } from "next";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { UserMenu } from "@/components/user-menu";
 
 const navItems = [
   { href: "/" as Route, label: "Inicio" },
@@ -43,12 +44,7 @@ export async function AppHeader() {
 
         <div className="top-nav-user">
           {userEmail ? (
-            <Link className="user-link" href="/perfil" title={userEmail}>
-              <span className="user-name">{userLabel}</span>
-              <span aria-hidden="true" className="user-avatar">
-                {userInitial}
-              </span>
-            </Link>
+            <UserMenu userEmail={userEmail} userInitial={userInitial} userLabel={userLabel} />
           ) : (
             <Link className="user-link" href="/login">
               <span className="user-name">{userLabel}</span>

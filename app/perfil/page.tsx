@@ -4,7 +4,7 @@ export default function PerfilPage() {
   return (
     <SectionPlaceholder
       title="Perfil"
-      description="Pantalla inicial reservada para la informacion y actividad del usuario."
+      description="Mock temporal del perfil. Aqui iremos integrando la informacion personal, actividad y ajustes de la cuenta."
     />
   );
 }
