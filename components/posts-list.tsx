@@ -39,10 +39,10 @@ export function PostsList({ posts, errorMessage }: PostsListProps) {
               <p>{post.prompt}</p>
               {post.image_url ? (
                 <a href={post.image_url} rel="noreferrer" target="_blank">
-                  {post.image_url}
+                  Ver imagen
                 </a>
               ) : (
-                <span className="helper-text">Sin image_url</span>
+                <span className="helper-text">Sin imagen asociada</span>
               )}
             </li>
           ))}

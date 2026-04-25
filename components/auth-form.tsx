@@ -24,6 +24,7 @@ export function AuthForm({
   return (
     <main className="page-shell auth-page">
       <section className="auth-card">
+        <p className="auth-eyebrow">Moodscape</p>
         <h1>{title}</h1>
         <p>{description}</p>
         {children}
@@ -44,11 +45,16 @@ export function AuthForm({
             />
           </label>
 
-          <button className="primary-button" type="submit">
-            {submitLabel}
-          </button>
+          <div className="button-row">
+            <button className="primary-button" type="submit">
+              {submitLabel}
+            </button>
+            <a className="secondary-button" href={alternateHref}>
+              {alternateLabel}
+            </a>
+          </div>
         </form>
-        <p className="helper-text">
+        <p className="helper-text auth-footer">
           {alternateText} <a href={alternateHref}>{alternateLabel}</a>
         </p>
       </section>

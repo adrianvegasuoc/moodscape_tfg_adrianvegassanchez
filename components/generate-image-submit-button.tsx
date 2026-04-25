@@ -6,8 +6,8 @@ export function GenerateImageSubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <button className="primary-button" disabled={pending} type="submit">
-      {pending ? "Generando imagen..." : "Generar imagen"}
+    <button className="primary-button creation-submit" disabled={pending} type="submit">
+      {pending ? "Generando..." : "Enviar"}
     </button>
   );
 }

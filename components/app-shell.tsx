@@ -1,10 +1,7 @@
 const sections = [
-  { href: "/login", label: "Login", description: "Acceso de usuarios." },
-  { href: "/register", label: "Registro", description: "Alta de nuevas cuentas." },
-  { href: "/dashboard", label: "Dashboard", description: "Zona privada del usuario autenticado." },
-  { href: "/crear", label: "Crear", description: "Generacion de nuevas obras." },
-  { href: "/explorar", label: "Explorar", description: "Descubrimiento de creaciones." },
-  { href: "/perfil", label: "Perfil", description: "Espacio personal del usuario." }
+  { href: "/dashboard", label: "Crear", description: "Genera piezas visuales desde un prompt emocional." },
+  { href: "/explorar", label: "Explorar", description: "Descubre tendencias, referencias y atmosferas visuales." },
+  { href: "/login", label: "Acceder", description: "Entra para guardar historial y continuar creando." }
 ];
 
 export function AppShell() {
@@ -13,15 +10,15 @@ export function AppShell() {
       <section className="landing">
         <h1>Moodscape</h1>
         <p>
-          Aplicacion web orientada a la expresion emocional mediante arte generativo basado en IA.
+          Expresion emocional mediante imagen generativa, con una experiencia limpia, centrada y contemplativa.
         </p>
         <p className="status-message">
-          El entorno base esta correctamente configurado y ahora incluye autenticacion basica.
+          MVP funcional con autenticacion, generacion de imagenes e historial personal.
         </p>
       </section>
 
       <section className="section-block">
-        <h2>Secciones previstas</h2>
+        <h2>Recorridos principales</h2>
         <div className="route-grid">
           {sections.map((section) => (
             <a className="route-card" href={section.href} key={section.href}>
