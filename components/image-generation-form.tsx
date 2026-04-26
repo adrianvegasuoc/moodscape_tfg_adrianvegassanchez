@@ -105,8 +105,6 @@ export function ImageGenerationForm({ message, type }: ImageGenerationFormProps)
         />
         <GenerateImageSubmitButton />
       </form>
-
-      <p className="creation-legal">Term of use. Privacy policy</p>
     </section>
   );
 }

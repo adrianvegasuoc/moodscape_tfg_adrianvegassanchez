@@ -3,29 +3,40 @@ import type { Route } from "next";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { UserMenu } from "@/components/user-menu";
+import { getUserHandle, getUserInitial } from "@/lib/user";
 
 const navItems = [
   { href: "/" as Route, label: "Inicio" },
-  { href: "/explorar" as Route, label: "Explorar" }
+  { href: "/explorar" as Route, label: "Explorar" },
+  { href: "/mi-mapa-emocional" as Route, label: "Mis creaciones" }
 ];
 
-async function getCurrentUserEmail() {
+async function getCurrentUserIdentity() {
   try {
     const supabase = await createServerSupabaseClient();
     const {
       data: { user }
     } = await supabase.auth.getUser();
 
-    return user?.email ?? null;
+    if (!user) {
+      return null;
+    }
+
+    return {
+      email: user.email ?? "",
+      initial: getUserInitial(user),
+      label: getUserHandle(user)
+    };
   } catch {
     return null;
   }
 }
 
 export async function AppHeader() {
-  const userEmail = await getCurrentUserEmail();
-  const userLabel = userEmail ? userEmail.split("@")[0] : "Acceder";
-  const userInitial = userLabel.slice(0, 1).toUpperCase();
+  const userIdentity = await getCurrentUserIdentity();
+  const userEmail = userIdentity?.email ?? null;
+  const userLabel = userIdentity?.label ?? "Acceder";
+  const userInitial = userIdentity?.initial ?? userLabel.slice(0, 1).toUpperCase();
 
   return (
     <header className="app-header">

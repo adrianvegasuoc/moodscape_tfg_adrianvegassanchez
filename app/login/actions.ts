@@ -56,7 +56,7 @@ export async function loginAction(formData: FormData) {
 
   // Revalidamos el layout para que los componentes server lean la sesion actualizada.
   revalidatePath("/", "layout");
-  redirect("/dashboard" as Route);
+  redirect("/" as Route);
 }
 
 // Server Action del formulario de registro.

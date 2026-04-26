@@ -1,5 +1,14 @@
-import { AppShell } from "@/components/app-shell";
+import { PrivateHome } from "@/components/private-home";
 
-export default function HomePage() {
-  return <AppShell />;
+type HomePageProps = {
+  searchParams: Promise<{
+    generated_post_id?: string;
+    message?: string;
+    post_id?: string;
+    type?: string;
+  }>;
+};
+
+export default async function HomePage({ searchParams }: HomePageProps) {
+  return <PrivateHome searchParams={await searchParams} />;
 }

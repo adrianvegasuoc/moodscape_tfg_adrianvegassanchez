@@ -73,7 +73,8 @@ code {
 
 .top-nav-links {
   display: flex;
-  gap: 2rem;
+  gap: 1.6rem;
+  flex-wrap: wrap;
 }
 
 .top-nav-user {
@@ -247,6 +248,10 @@ code {
 .dashboard-page {
   display: grid;
   justify-items: center;
+}
+
+.home-page {
+  gap: 3rem;
 }
 
 .status-message {
@@ -570,10 +575,184 @@ code {
   border-radius: 0.28rem;
 }
 
-.creation-legal {
-  margin-top: 3rem;
-  color: #9092a5;
-  font-size: 0.72rem;
+.emotional-map-page {
+  padding-top: 2.1rem;
+}
+
+.emotional-map-panel {
+  width: min(880px, 100%);
+  border: 1px solid #d9dce7;
+  background: #ffffff;
+}
+
+.emotional-map-panel-compact {
+  width: min(780px, 100%);
+}
+
+.emotional-map-panel-full {
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.4rem 2rem 2rem;
+}
+
+.emotional-map-title {
+  margin: 0;
+  color: #55586d;
+  font-weight: 700;
+}
+
+.emotional-map-title-compact {
+  padding: 0.7rem 0.6rem 0.55rem;
+  font-size: 0.9rem;
+}
+
+.emotional-map-title-full {
+  padding: 0 0 1.4rem;
+  color: var(--foreground-strong);
+  font-size: 3rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.emotional-map-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0;
+}
+
+.emotional-map-grid-full {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.emotional-map-grid-compact .emotional-map-image {
+  height: 11.1rem;
+}
+
+.emotional-map-grid-compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+}
+
+.emotional-map-grid-compact .emotional-map-link {
+  border-right: 1px solid #d9dce7;
+  border-top: 1px solid #d9dce7;
+}
+
+.emotional-map-grid-compact > .emotional-map-link:nth-child(3n) {
+  border-right: 0;
+}
+
+.emotional-map-link {
+  display: block;
+  border-right: 1px solid #d9dce7;
+  border-top: 1px solid #d9dce7;
+}
+
+.emotional-map-grid-full .emotional-map-link {
+  border: 1px solid #ececf1;
+  background: #ffffff;
+}
+
+.emotional-map-grid > .emotional-map-link:nth-child(6n) {
+  border-right: 0;
+}
+
+.emotional-map-image {
+  width: 100%;
+  height: 12.8rem;
+  object-fit: cover;
+}
+
+.emotional-map-image-full {
+  height: 18rem;
+  object-fit: cover;
+  background: #f8f8fb;
+}
+
+.emotional-map-footer {
+  padding: 0.8rem 0 1rem;
+  text-align: center;
+}
+
+.emotional-map-footer-link {
+  color: #656778;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.emotional-map-empty {
+  margin: 0;
+  padding: 2.2rem 1.5rem 2.5rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.profile-page {
+  width: min(720px, 100%);
+  margin: 0 auto;
+  padding: 4rem 0 2rem;
+}
+
+.profile-card {
+  text-align: center;
+}
+
+.profile-title {
+  margin: 0 0 3rem;
+  color: var(--foreground-strong);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+}
+
+.profile-form {
+  display: grid;
+  gap: 1.35rem;
+  width: min(360px, 100%);
+  margin: 0 auto;
+}
+
+.profile-field {
+  display: grid;
+  gap: 0.45rem;
+  text-align: left;
+}
+
+.profile-field span {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.profile-field input {
+  width: 100%;
+  padding: 0.65rem 0.1rem;
+  border: 0;
+  border-bottom: 1px solid #e0e2ea;
+  background: transparent;
+  color: var(--foreground-strong);
+  border-radius: 0;
+}
+
+.profile-field input:disabled {
+  color: #777993;
+  opacity: 1;
+}
+
+.profile-help {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.profile-submit {
+  width: 8.5rem;
+  margin: 0.5rem auto 0;
+  border-radius: 0.28rem;
 }
 
 .result-screen {
@@ -889,12 +1068,17 @@ code {
 
   .button-row,
   .dashboard-grid,
+  .emotional-map-grid-full,
   .related-grid,
   .trend-hero-grid,
   .explore-secondary-grid,
   .trend-tag-grid,
   .explore-detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  .emotional-map-grid-full {
+    padding: 0.45rem 1rem 1rem;
   }
 
   .creation-stage {

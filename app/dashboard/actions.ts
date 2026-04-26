@@ -26,10 +26,10 @@ function buildDashboardRedirect(
   });
 
   if (generatedPostId) {
-    params.set("generated_post_id", generatedPostId);
+    params.set("post_id", generatedPostId);
   }
 
-  return `/dashboard?${params.toString()}` as Route;
+  return `/?${params.toString()}` as Route;
 }
 
 // Esta accion coordina la generacion con OpenAI, la subida a Storage y la insercion en posts.
@@ -83,7 +83,9 @@ export async function generateImageAction(formData: FormData) {
     redirect(buildDashboardRedirect(message, "error"));
   }
 
+  revalidatePath("/");
   revalidatePath("/dashboard");
+  revalidatePath("/mi-mapa-emocional");
   redirect(
     buildDashboardRedirect("Imagen generada y guardada correctamente.", "success", createdPostId)
   );

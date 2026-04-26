@@ -13,7 +13,7 @@ export async function redirectIfAuthenticated() {
   } = await supabase.auth.getUser();
 
   if (user) {
-    redirect("/dashboard" as Route);
+    redirect("/" as Route);
   }
 }
 

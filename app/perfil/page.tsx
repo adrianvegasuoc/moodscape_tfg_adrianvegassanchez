@@ -1,10 +1,26 @@
-import { SectionPlaceholder } from "@/components/section-placeholder";
+import { ProfileForm } from "@/components/profile-form";
+import { requireAuthenticatedUser } from "@/lib/supabase/auth";
+import { getUserHandle } from "@/lib/user";
 
-export default function PerfilPage() {
+type PerfilPageProps = {
+  searchParams: Promise<{
+    message?: string;
+    type?: string;
+  }>;
+};
+
+export default async function PerfilPage({ searchParams }: PerfilPageProps) {
+  const { user } = await requireAuthenticatedUser();
+  const params = await searchParams;
+
   return (
-    <SectionPlaceholder
-      title="Perfil"
-      description="Mock temporal del perfil. Aqui iremos integrando la informacion personal, actividad y ajustes de la cuenta."
-    />
+    <main className="page-shell">
+      <ProfileForm
+        email={user.email ?? ""}
+        message={params.message}
+        type={params.type}
+        username={getUserHandle(user)}
+      />
+    </main>
   );
 }
