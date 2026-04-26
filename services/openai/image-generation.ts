@@ -14,15 +14,19 @@ export type GenerateMoodscapeImageResult = {
   revisedPrompt: string;
 };
 
-function buildImagePrompt(input: GenerateMoodscapeImageInput) {
-  const basePrompt =
-    "Genera una imagen artistica y evocadora basada en esta emocion o descripcion emocional.";
+const MOODSCAPE_STYLE_PREFIX = [
+  "Genera una imagen original de alta calidad.",
+  "Directrices visuales obligatorias: expresionismo, sentimientos intensos y composicion abstracta.",
+  "La imagen debe priorizar la atmosfera emocional, la fuerza cromatica, el gesto pictorico y una interpretacion artistica evocadora.",
+  "Usa la descripcion del usuario como base tematica o narrativa, pero manteniendo siempre ese lenguaje visual."
+].join(" ");
 
+function buildImagePrompt(input: GenerateMoodscapeImageInput) {
   if (!input.mood) {
-    return `${basePrompt} Prompt del usuario: ${input.prompt}`;
+    return `${MOODSCAPE_STYLE_PREFIX} Descripcion del usuario: ${input.prompt}`;
   }
 
-  return `${basePrompt} Emocion principal: ${input.mood}. Prompt del usuario: ${input.prompt}`;
+  return `${MOODSCAPE_STYLE_PREFIX} Emocion principal: ${input.mood}. Descripcion del usuario: ${input.prompt}`;
 }
 
 function getMockImageBuffer() {

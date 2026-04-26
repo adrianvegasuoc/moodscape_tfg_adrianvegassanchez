@@ -6,15 +6,27 @@ type ExploreDetailPageProps = {
   params: Promise<{
     term: string;
   }>;
+  searchParams: Promise<{
+    view?: string;
+  }>;
 };
 
-export default async function ExploreDetailPage({ params }: ExploreDetailPageProps) {
+export default async function ExploreDetailPage({ params, searchParams }: ExploreDetailPageProps) {
   const { term } = await params;
+  const resolvedSearchParams = await searchParams;
   const supabase = await createServerSupabaseClient();
   const decodedTerm = decodeURIComponent(term);
   const posts = await getPostsByPromptTerm(supabase, decodedTerm, undefined, 18);
   const publicPosts = await getPublicPosts(supabase, 80);
   const trends = buildTrendingTerms(publicPosts, 6);
+  const isExpanded = resolvedSearchParams.view === "expanded";
 
-  return <ExploreDetail currentTerm={decodedTerm} posts={posts} trends={trends} />;
+  return (
+    <ExploreDetail
+      currentTerm={decodedTerm}
+      isExpanded={isExpanded}
+      posts={posts}
+      trends={trends}
+    />
+  );
 }

@@ -15,6 +15,7 @@ type ExploreOverviewProps = {
 
 type ExploreDetailProps = {
   currentTerm: string;
+  isExpanded: boolean;
   posts: Post[];
   trends: string[];
 };
@@ -25,6 +26,10 @@ function formatTrendLabel(term: string) {
 
 function buildExploreTermHref(term: string) {
   return `/explorar/${encodeURIComponent(term)}` as Route;
+}
+
+function buildResultHref(postId: string) {
+  return `/?post_id=${encodeURIComponent(postId)}` as Route;
 }
 
 export function ExploreOverview({ trends }: ExploreOverviewProps) {
@@ -71,14 +76,14 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
               <div className="explore-strip-images">
                 {trend.posts.slice(0, 3).map((post) =>
                   post.image_url ? (
-                    <Link href={buildExploreTermHref(trend.term)} key={post.id}>
+                    <Link className="explore-strip-link" href={buildExploreTermHref(trend.term)} key={post.id}>
                       <Image
                         alt={`Imagen relacionada con ${trend.term}`}
                         className="explore-strip-image"
-                        height={180}
+                        height={280}
                         src={post.image_url}
                         unoptimized
-                        width={180}
+                        width={280}
                       />
                     </Link>
                   ) : null
@@ -105,29 +110,39 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
   );
 }
 
-export function ExploreDetail({ currentTerm, posts, trends }: ExploreDetailProps) {
+export function ExploreDetail({ currentTerm, posts, trends, isExpanded }: ExploreDetailProps) {
+  const visiblePosts = posts.length <= 3 ? posts : posts.slice(0, isExpanded ? 18 : 6);
+  const shouldShowMoreButton = !isExpanded && posts.length > 6;
+
   return (
     <main className="page-shell explore-page">
       <section className="explore-panel explore-detail-panel">
         <p className="explore-detail-title">{currentTerm}</p>
         <div className="explore-detail-grid">
-          {posts.map((post) =>
+          {visiblePosts.map((post) =>
             post.image_url ? (
-              <Image
-                alt={`Imagen relacionada con ${currentTerm}`}
-                className="explore-detail-image"
-                height={220}
-                key={post.id}
-                src={post.image_url}
-                unoptimized
-                width={220}
-              />
+              <Link className="explore-detail-link" href={buildResultHref(post.id)} key={post.id}>
+                <Image
+                  alt={`Imagen relacionada con ${currentTerm}`}
+                  className="explore-detail-image"
+                  height={520}
+                  src={post.image_url}
+                  unoptimized
+                  width={520}
+                />
+              </Link>
             ) : null
           )}
         </div>
-        <button className="more-chip-button explore-more-button" type="button">
-          Ver más
-        </button>
+
+        {shouldShowMoreButton ? (
+          <Link
+            className="more-chip-button explore-more-button"
+            href={`${buildExploreTermHref(currentTerm)}?view=expanded` as Route}
+          >
+            Ver más
+          </Link>
+        ) : null}
       </section>
 
       {trends.length > 0 ? (

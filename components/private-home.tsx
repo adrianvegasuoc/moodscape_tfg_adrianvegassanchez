@@ -3,8 +3,15 @@ import type { Route } from "next";
 import { EmotionalMapGallery } from "@/components/emotional-map-gallery";
 import { GeneratedImageResult } from "@/components/generated-image-result";
 import { ImageGenerationForm } from "@/components/image-generation-form";
+import { getUserHandleById } from "@/lib/supabase/admin";
 import { requireAuthenticatedUser } from "@/lib/supabase/auth";
-import { extractPromptTerms, getPostsByPromptTerm, getUserPosts } from "@/lib/supabase/posts";
+import {
+  extractPromptTerms,
+  getFallbackRecommendedPosts,
+  getPostsByPromptTerm,
+  getVisiblePostById,
+  getUserPosts
+} from "@/lib/supabase/posts";
 import { getUserHandle } from "@/lib/user";
 import type { Post } from "@/types/posts";
 
@@ -28,8 +35,16 @@ export async function PrivateHome({ searchParams }: PrivateHomeProps) {
   }
 
   const selectedPostId = searchParams.post_id ?? searchParams.generated_post_id;
-  const selectedPost = selectedPostId ? posts.find((post) => post.id === selectedPostId) : undefined;
-  const authorLabel = getUserHandle(user);
+  const ownSelectedPost = selectedPostId ? posts.find((post) => post.id === selectedPostId) : undefined;
+  const selectedPost =
+    ownSelectedPost ??
+    (selectedPostId ? await getVisiblePostById(supabase, selectedPostId) : undefined) ??
+    undefined;
+  const authorLabel = selectedPost
+    ? selectedPost.user_id === user.id
+      ? getUserHandle(user)
+      : (await getUserHandleById(selectedPost.user_id)) ?? undefined
+    : undefined;
   const relatedRows =
     selectedPost && selectedPost.prompt
       ? (
@@ -39,7 +54,7 @@ export async function PrivateHome({ searchParams }: PrivateHomeProps) {
                 supabase,
                 term,
                 selectedPost.id,
-                6
+                3
               );
 
               return {
@@ -50,6 +65,21 @@ export async function PrivateHome({ searchParams }: PrivateHomeProps) {
           )
         ).filter((row) => row.posts.length > 0)
       : [];
+  const fallbackPosts =
+    selectedPost && relatedRows.length === 0
+      ? await getFallbackRecommendedPosts(supabase, selectedPost.id, 3)
+      : [];
+  const displayRows =
+    relatedRows.length > 0
+      ? relatedRows
+      : fallbackPosts.length > 0
+        ? [
+            {
+              title: "Mas creaciones para explorar",
+              posts: fallbackPosts
+            }
+          ]
+        : [];
 
   if (selectedPost) {
     return (
@@ -57,7 +87,7 @@ export async function PrivateHome({ searchParams }: PrivateHomeProps) {
         <GeneratedImageResult
           authorLabel={authorLabel}
           post={selectedPost}
-          relatedRows={relatedRows}
+          relatedRows={displayRows}
         />
       </main>
     );

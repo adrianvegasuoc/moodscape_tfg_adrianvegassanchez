@@ -1,4 +1,6 @@
 import Image from "next/image";
+import Link from "next/link";
+import type { Route } from "next";
 
 import type { Post } from "@/types/posts";
 
@@ -8,10 +10,14 @@ type RelatedRow = {
 };
 
 type GeneratedImageResultProps = {
-  authorLabel: string;
+  authorLabel?: string;
   post: Post;
   relatedRows: RelatedRow[];
 };
+
+function buildResultHref(postId: string) {
+  return `/?post_id=${encodeURIComponent(postId)}` as Route;
+}
 
 function buildTags(prompt: string) {
   const words = prompt
@@ -49,7 +55,7 @@ export function GeneratedImageResult({ post, relatedRows, authorLabel }: Generat
               <span key={tag}>{tag}</span>
             ))}
           </div>
-          <span className="result-author">@{authorLabel}</span>
+          {authorLabel ? <span className="result-author">@{authorLabel}</span> : null}
         </div>
       </article>
 
@@ -65,15 +71,16 @@ export function GeneratedImageResult({ post, relatedRows, authorLabel }: Generat
               <div className="related-grid">
                 {row.posts.map((item) =>
                   item.image_url ? (
-                    <Image
-                      alt={`Referencia visual para: ${item.prompt}`}
-                      className="related-image"
-                      height={320}
-                      key={item.id}
-                      src={item.image_url}
-                      unoptimized
-                      width={320}
-                    />
+                    <Link className="related-link" href={buildResultHref(item.id)} key={item.id}>
+                      <Image
+                        alt={`Referencia visual para: ${item.prompt}`}
+                        className="related-image"
+                        height={480}
+                        src={item.image_url}
+                        unoptimized
+                        width={480}
+                      />
+                    </Link>
                   ) : null
                 )}
               </div>

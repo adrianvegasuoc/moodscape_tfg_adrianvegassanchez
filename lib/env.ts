@@ -29,6 +29,10 @@ export function getServiceRoleKey() {
   return getEnv("SUPABASE_SERVICE_ROLE_KEY", process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
+export function hasServiceRoleKey() {
+  return Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
 export function getOpenAiApiKey() {
   return getEnv("OPENAI_API_KEY", process.env.OPENAI_API_KEY);
 }

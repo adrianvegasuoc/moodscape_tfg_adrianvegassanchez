@@ -75,6 +75,24 @@ export async function getPublicPosts(
   return data ?? [];
 }
 
+export async function getVisiblePostById(
+  supabase: AuthenticatedSupabaseClient,
+  postId: string
+): Promise<Post | null> {
+  const { data, error } = await supabase
+    .from("posts")
+    .select("*")
+    .eq("id", postId)
+    .not("image_url", "is", null)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ?? null;
+}
+
 export async function createUserPost(
   supabase: AuthenticatedSupabaseClient,
   user: User,
@@ -152,6 +170,31 @@ export async function getPostsByPromptTerm(
     .from("posts")
     .select("*")
     .ilike("prompt", `%${term}%`)
+    .not("image_url", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (excludePostId) {
+    query = query.neq("id", excludePostId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return data ?? [];
+}
+
+export async function getFallbackRecommendedPosts(
+  supabase: AuthenticatedSupabaseClient,
+  excludePostId?: string,
+  limit = 3
+): Promise<Post[]> {
+  let query = supabase
+    .from("posts")
+    .select("*")
     .not("image_url", "is", null)
     .order("created_at", { ascending: false })
     .limit(limit);
