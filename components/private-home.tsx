@@ -3,6 +3,7 @@ import type { Route } from "next";
 import { EmotionalMapGallery } from "@/components/emotional-map-gallery";
 import { GeneratedImageResult } from "@/components/generated-image-result";
 import { ImageGenerationForm } from "@/components/image-generation-form";
+import { InspirationCard } from "@/components/inspiration-card";
 import { getUserHandleById } from "@/lib/supabase/admin";
 import { requireAuthenticatedUser } from "@/lib/supabase/auth";
 import {
@@ -97,13 +98,18 @@ export async function PrivateHome({ searchParams }: PrivateHomeProps) {
     <main className="page-shell dashboard-page home-page">
       <ImageGenerationForm message={searchParams.message} type={searchParams.type} />
 
-      <EmotionalMapGallery
-        compact
-        footerHref={"/mi-mapa-emocional" as Route}
-        footerLabel="Ver completo"
-        posts={posts.slice(0, 9)}
-        title="Mis creaciones"
-      />
+      <div className="home-discovery-grid">
+        <EmotionalMapGallery
+          compact
+          description="Revisa las imágenes que has creado recientemente."
+          footerHref={"/mi-mapa-emocional" as Route}
+          footerLabel="Ver mi mapa emocional"
+          posts={posts.slice(0, 3)}
+          title="Tus últimos momentos"
+        />
+
+        <InspirationCard />
+      </div>
     </main>
   );
 }

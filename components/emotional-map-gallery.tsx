@@ -6,6 +6,7 @@ import type { Post } from "@/types/posts";
 
 type EmotionalMapGalleryProps = {
   compact?: boolean;
+  description?: string;
   footerHref?: Route;
   footerLabel?: string;
   posts: Post[];
@@ -19,6 +20,7 @@ function buildResultHref(postId: string) {
 export function EmotionalMapGallery({
   posts,
   title,
+  description,
   compact = false,
   footerHref,
   footerLabel
@@ -29,11 +31,14 @@ export function EmotionalMapGallery({
     <section
       className={`emotional-map-panel ${compact ? "emotional-map-panel-compact" : "emotional-map-panel-full"}`}
     >
-      <p
-        className={`emotional-map-title ${compact ? "emotional-map-title-compact" : "emotional-map-title-full"}`}
-      >
-        {title}
-      </p>
+      <div className="emotional-map-heading">
+        <h2
+          className={`emotional-map-title ${compact ? "emotional-map-title-compact" : "emotional-map-title-full"}`}
+        >
+          {title}
+        </h2>
+        {description ? <p className="emotional-map-description">{description}</p> : null}
+      </div>
 
       {imagePosts.length > 0 ? (
         <div
