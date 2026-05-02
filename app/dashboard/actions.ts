@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { requireAuthenticatedUser } from "@/lib/supabase/auth";
 import { createUserPost } from "@/lib/supabase/posts";
 import { removeGeneratedImage, uploadGeneratedImage } from "@/lib/supabase/storage";
+import { validatePrompt } from "@/lib/validation/prompt-validation";
 import { generateMoodscapeImage } from "@/services/openai/image-generation";
 
 // Utilidad basica para leer valores de formularios HTML sin repetir comprobaciones.
@@ -40,17 +41,25 @@ export async function generateImageAction(formData: FormData) {
   // Extraemos y normalizamos los campos del formulario enviado desde dashboard.
   const prompt = getStringValue(formData.get("prompt"));
   const isPublic = formData.get("is_public") === "on";
+  const promptValidation = validatePrompt(prompt);
 
-  if (!prompt) {
-    redirect(buildDashboardRedirect("El prompt es obligatorio.", "error"));
+  if (!promptValidation.valid || !promptValidation.sanitizedPrompt) {
+    redirect(
+      buildDashboardRedirect(
+        promptValidation.reason || "El texto contiene caracteres o patrones no permitidos.",
+        "error"
+      )
+    );
   }
+
+  const sanitizedPrompt = promptValidation.sanitizedPrompt;
 
   let uploadedImagePath: string | undefined;
   let createdPostId: string | undefined;
 
   try {
     const generatedImage = await generateMoodscapeImage({
-      prompt
+      prompt: sanitizedPrompt
     });
 
     const uploadedImage = await uploadGeneratedImage(supabase, {
@@ -63,7 +72,7 @@ export async function generateImageAction(formData: FormData) {
     uploadedImagePath = uploadedImage.path;
 
     const post = await createUserPost(supabase, user, {
-      prompt,
+      prompt: sanitizedPrompt,
       imageUrl: uploadedImage.publicUrl,
       isPublic
     });
