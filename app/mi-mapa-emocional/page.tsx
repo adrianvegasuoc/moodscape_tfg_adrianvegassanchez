@@ -1,4 +1,4 @@
-import { EmotionalMapGallery } from "@/components/emotional-map-gallery";
+import { PersonalEmotionalMap } from "@/components/personal-emotional-map";
 import { requireAuthenticatedUser } from "@/lib/supabase/auth";
 import { getUserPosts } from "@/lib/supabase/posts";
 import type { Post } from "@/types/posts";
@@ -15,7 +15,7 @@ export default async function EmotionalMapPage() {
 
   return (
     <main className="page-shell emotional-map-page">
-      <EmotionalMapGallery posts={posts} title="Mis creaciones" />
+      <PersonalEmotionalMap posts={posts} />
     </main>
   );
 }

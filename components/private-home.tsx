@@ -26,7 +26,7 @@ type PrivateHomeProps = {
 };
 
 export async function PrivateHome({ searchParams }: PrivateHomeProps) {
-  const { supabase, user } = await requireAuthenticatedUser();
+  const { supabase, user } = await requireAuthenticatedUser({ showLoginMessage: false });
   let posts: Post[] = [];
 
   try {

@@ -21,7 +21,11 @@ type ExploreDetailProps = {
 };
 
 function formatTrendLabel(term: string) {
-  return `#${term.toUpperCase()}`;
+  return `#${term.charAt(0).toLocaleUpperCase("es-ES")}${term.slice(1)}`;
+}
+
+function formatSectionTitle(term: string) {
+  return formatTrendLabel(term);
 }
 
 function buildExploreTermHref(term: string) {
@@ -39,9 +43,17 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
 
   return (
     <main className="page-shell explore-page">
+      <section className="explore-intro" aria-labelledby="explore-title">
+        <h1 id="explore-title">Explora el paisaje emocional colectivo</h1>
+        <p>Descubre imágenes creadas a partir de emociones, recuerdos y momentos compartidos.</p>
+      </section>
+
       {heroTrends.length > 0 ? (
-        <section className="explore-panel explore-hero-panel">
-          <h1>Tendencia ahora mismo</h1>
+        <section className="explore-section explore-hero-panel" aria-labelledby="explore-trends-title">
+          <div className="explore-section-heading">
+            <h2 id="explore-trends-title">Tendencias destacadas</h2>
+            <p>Entra en las emociones que más se están compartiendo ahora.</p>
+          </div>
           <div className="trend-hero-grid">
             {heroTrends.map((trend) => {
               const featuredPost = trend.posts[0];
@@ -52,15 +64,17 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
 
               return (
                 <Link className="trend-hero-card" href={buildExploreTermHref(trend.term)} key={trend.term}>
-                  <Image
-                    alt={`Tendencia ${trend.term}`}
-                    className="trend-hero-image"
-                    height={420}
-                    src={featuredPost.image_url}
-                    unoptimized
-                    width={420}
-                  />
-                  <span className="trend-hero-label">{formatTrendLabel(trend.term)}</span>
+                  <span className="trend-hero-media">
+                    <Image
+                      alt={`Tendencia ${trend.term}`}
+                      className="trend-hero-image"
+                      height={420}
+                      src={featuredPost.image_url}
+                      unoptimized
+                      width={420}
+                    />
+                    <span className="trend-hero-label">{formatTrendLabel(trend.term)}</span>
+                  </span>
                 </Link>
               );
             })}
@@ -69,10 +83,12 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
       ) : null}
 
       {secondaryTrends.length > 0 ? (
-        <section className="explore-secondary-grid">
+        <section className="explore-secondary-grid" aria-label="Categorias para descubrir">
           {secondaryTrends.map((trend) => (
             <article className="explore-strip" key={trend.term}>
-              <p>{formatTrendLabel(trend.term)}</p>
+              <div className="explore-strip-heading">
+                <h2>{formatSectionTitle(trend.term)}</h2>
+              </div>
               <div className="explore-strip-images">
                 {trend.posts.slice(0, 3).map((post) =>
                   post.image_url ? (
@@ -95,8 +111,10 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
       ) : null}
 
       {trendTerms.length > 0 ? (
-        <section className="explore-panel trend-tags-panel">
-          <p>Tendencias</p>
+        <section className="trend-tags-panel" aria-labelledby="trend-tags-title">
+          <div className="explore-section-heading">
+            <h2 id="trend-tags-title">Explora por emoción</h2>
+          </div>
           <div className="trend-tag-grid">
             {trendTerms.map((term) => (
               <Link className="trend-tag-card" href={buildExploreTermHref(term)} key={term}>
@@ -116,8 +134,14 @@ export function ExploreDetail({ currentTerm, posts, trends, isExpanded }: Explor
 
   return (
     <main className="page-shell explore-page">
-      <section className="explore-panel explore-detail-panel">
-        <p className="explore-detail-title">{currentTerm}</p>
+      <section className="explore-detail-panel">
+        <div className="explore-detail-heading">
+          <h1>{formatSectionTitle(currentTerm)}</h1>
+          <p>
+            Creaciones relacionadas con {currentTerm}, calma y momentos compartidos.
+          </p>
+        </div>
+
         <div className="explore-detail-grid">
           {visiblePosts.map((post) =>
             post.image_url ? (
@@ -146,8 +170,10 @@ export function ExploreDetail({ currentTerm, posts, trends, isExpanded }: Explor
       </section>
 
       {trends.length > 0 ? (
-        <section className="explore-panel trend-tags-panel">
-          <p>Tendencias</p>
+        <section className="trend-tags-panel" aria-labelledby="detail-trend-tags-title">
+          <div className="explore-section-heading">
+            <h2 id="detail-trend-tags-title">Seguir explorando</h2>
+          </div>
           <div className="trend-tag-grid">
             {trends.map((term) => (
               <Link className="trend-tag-card" href={buildExploreTermHref(term)} key={term}>

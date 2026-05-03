@@ -5,10 +5,15 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { UserMenu } from "@/components/user-menu";
 import { getUserHandle, getUserInitial } from "@/lib/user";
 
-const navItems = [
+const privateNavItems = [
   { href: "/" as Route, label: "Inicio" },
   { href: "/explorar" as Route, label: "Explorar" },
   { href: "/mi-mapa-emocional" as Route, label: "Mis creaciones" }
+];
+
+const publicNavItems = [
+  { href: "/explorar" as Route, label: "Descubre Moodscape" },
+  { href: "/login" as Route, label: "Cómo funciona" }
 ];
 
 async function getCurrentUserIdentity() {
@@ -37,6 +42,7 @@ export async function AppHeader() {
   const userEmail = userIdentity?.email ?? null;
   const userLabel = userIdentity?.label ?? "Acceder";
   const userInitial = userIdentity?.initial ?? userLabel.slice(0, 1).toUpperCase();
+  const navItems = userEmail ? privateNavItems : publicNavItems;
 
   return (
     <header className="app-header">
