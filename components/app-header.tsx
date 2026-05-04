@@ -36,7 +36,7 @@ async function getCurrentUserIdentity() {
 export async function AppHeader() {
   const userIdentity = await getCurrentUserIdentity();
   const userEmail = userIdentity?.email ?? null;
-  const userLabel = userIdentity?.label ?? "Acceder";
+  const userLabel = userIdentity?.label ?? "Iniciar sesión";
   const userInitial = userIdentity?.initial ?? userLabel.slice(0, 1).toUpperCase();
 
   return (

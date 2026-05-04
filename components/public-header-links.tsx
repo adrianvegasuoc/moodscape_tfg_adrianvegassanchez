@@ -7,11 +7,17 @@ import { usePathname } from "next/navigation";
 const discoverHref = "/descubre-moodscape" as Route;
 const discoverHowItWorksHref = "/descubre-moodscape#como-funciona" as Route;
 const loginHref = "/login" as Route;
+const authOnlyDiscoverPaths = new Set([
+  "/actualizar-password",
+  "/login",
+  "/recuperar-password",
+  "/register"
+]);
 
 export function PublicHeaderLinks() {
   const pathname = usePathname();
 
-  if (pathname === "/login") {
+  if (authOnlyDiscoverPaths.has(pathname)) {
     return (
       <nav aria-label="Principal" className="top-nav-links">
         <Link className="nav-link" href={discoverHref}>
@@ -46,15 +52,15 @@ export function PublicHeaderLinks() {
 export function PublicAccessLink() {
   const pathname = usePathname();
 
-  if (pathname === "/descubre-moodscape") {
+  if (pathname === "/descubre-moodscape" || authOnlyDiscoverPaths.has(pathname)) {
     return null;
   }
 
   return (
     <Link className="user-link" href={loginHref}>
-      <span className="user-name">Acceder</span>
+      <span className="user-name">Iniciar sesión</span>
       <span aria-hidden="true" className="user-avatar">
-        A
+        I
       </span>
     </Link>
   );

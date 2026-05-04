@@ -31,6 +31,22 @@ function getOriginFromHeaders(headersStore: Headers) {
   return "http://localhost:3000";
 }
 
+function buildPasswordRecoveryRedirectUrl(origin: string) {
+  const redirectUrl = new URL("/auth/callback", origin);
+  redirectUrl.searchParams.set("next", "/actualizar-password");
+
+  return redirectUrl.toString();
+}
+
+const RECOVERY_SUCCESS_MESSAGE =
+  "Si el email existe, recibirás instrucciones para restablecer tu contraseña.";
+
+function isNonDisclosureRecoveryError(error: { message?: string; status?: number }) {
+  const message = error.message?.toLocaleLowerCase("es-ES") ?? "";
+
+  return error.status === 404 || message.includes("not found") || message.includes("not exist");
+}
+
 // Server Action del formulario de login.
 // Se ejecuta en el servidor, valida los campos basicos y deja que Supabase cree la sesion.
 export async function loginAction(formData: FormData) {
@@ -90,10 +106,102 @@ export async function registerAction(formData: FormData) {
   redirect(
     buildAuthRedirect(
       "/login",
-      "Registro completado. Revisa tu correo si Supabase pide confirmar la cuenta.",
+      "Registro completado. Revisa tu correo para confirmar tu cuenta antes de iniciar sesión.",
       "success"
     )
   );
+}
+
+// Solicita a Supabase el envio del email de recuperacion sin revelar si la cuenta existe.
+export async function recoverPasswordAction(formData: FormData) {
+  const email = getStringValue(formData.get("email"));
+
+  if (!email) {
+    redirect(buildAuthRedirect("/recuperar-password", "Introduce tu email.", "error"));
+  }
+
+  const headersStore = await headers();
+  const origin = getOriginFromHeaders(headersStore);
+  const supabase = await createServerSupabaseClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: buildPasswordRecoveryRedirectUrl(origin)
+  });
+
+  if (error) {
+    if (isNonDisclosureRecoveryError(error)) {
+      redirect(buildAuthRedirect("/recuperar-password", RECOVERY_SUCCESS_MESSAGE, "success"));
+    }
+
+    console.error("Password recovery email failed", {
+      message: error.message,
+      name: error.name,
+      status: error.status
+    });
+
+    redirect(
+      buildAuthRedirect(
+        "/recuperar-password",
+        "No se ha podido enviar el correo. Inténtalo de nuevo.",
+        "error"
+      )
+    );
+  }
+
+  redirect(
+    buildAuthRedirect("/recuperar-password", RECOVERY_SUCCESS_MESSAGE, "success")
+  );
+}
+
+// Guarda una nueva contraseña tras abrir el enlace de recuperacion y crear la sesion temporal.
+export async function updateRecoveredPasswordAction(formData: FormData) {
+  const password = getStringValue(formData.get("password"));
+
+  if (!password) {
+    redirect(buildAuthRedirect("/actualizar-password", "Introduce tu nueva contraseña.", "error"));
+  }
+
+  if (password.length < 6) {
+    redirect(
+      buildAuthRedirect(
+        "/actualizar-password",
+        "La nueva contraseña debe tener al menos 6 caracteres.",
+        "error"
+      )
+    );
+  }
+
+  const supabase = await createServerSupabaseClient();
+  const {
+    data: { user }
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect(
+      buildAuthRedirect(
+        "/recuperar-password",
+        "Abre de nuevo el enlace de recuperación o solicita otro correo.",
+        "error"
+      )
+    );
+  }
+
+  const { error } = await supabase.auth.updateUser({
+    password
+  });
+
+  if (error) {
+    redirect(
+      buildAuthRedirect(
+        "/actualizar-password",
+        "No se ha podido actualizar la contraseña. Inténtalo de nuevo.",
+        "error"
+      )
+    );
+  }
+
+  await supabase.auth.signOut();
+  revalidatePath("/", "layout");
+  redirect(buildAuthRedirect("/login", "Contraseña actualizada. Inicia sesión de nuevo.", "success"));
 }
 
 // El logout borra la sesion actual de Supabase y actualiza la UI del lado servidor.

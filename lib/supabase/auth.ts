@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-type AuthPagePath = "/login" | "/register";
+type AuthPagePath = "/actualizar-password" | "/login" | "/recuperar-password" | "/register";
 type RequireAuthenticatedUserOptions = {
   showLoginMessage?: boolean;
 };

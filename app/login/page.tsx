@@ -22,12 +22,13 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   return (
     <AuthForm
       // El componente AuthForm encapsula la estructura visual comun de login y registro.
-      title="Iniciar sesion"
+      title="Iniciar sesión"
       description="Accede con tu email y contraseña para entrar en Moodscape."
-      submitLabel="Entrar"
+      submitLabel="Iniciar sesión"
+      forgotPasswordHref="/recuperar-password"
       alternateText="¿No tienes cuenta?"
       alternateHref="/register"
-      alternateLabel="Registrate"
+      alternateLabel="Crear cuenta"
       action={loginAction}
     >
       {/* Este bloque muestra errores de validacion o mensajes de exito enviados por redirect. */}

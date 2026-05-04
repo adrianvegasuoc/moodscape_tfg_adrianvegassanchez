@@ -1,6 +1,34 @@
 import Link from "next/link";
+import type { Route } from "next";
 
-export function AppFooter() {
+import { createServerSupabaseClient } from "@/lib/supabase/server";
+
+const privateFooterLinks = [
+  { href: "/explorar" as Route, label: "Explorar" },
+  { href: "/mi-mapa-emocional" as Route, label: "Mis creaciones" }
+];
+
+const publicFooterLinks = [
+  { href: "/descubre-moodscape" as Route, label: "Descubre Moodscape" },
+  { href: "/login" as Route, label: "Iniciar sesión" }
+];
+
+async function hasCurrentUser() {
+  try {
+    const supabase = await createServerSupabaseClient();
+    const {
+      data: { user }
+    } = await supabase.auth.getUser();
+
+    return Boolean(user);
+  } catch {
+    return false;
+  }
+}
+
+export async function AppFooter() {
+  const footerLinks = (await hasCurrentUser()) ? privateFooterLinks : publicFooterLinks;
+
   return (
     <footer className="app-footer">
       <div className="app-footer-inner">
@@ -12,8 +40,11 @@ export function AppFooter() {
         <p className="app-footer-credit">TFG · Adrián Vegas Sánchez</p>
 
         <nav aria-label="Pie de pagina" className="app-footer-links">
-          <Link href="/explorar">Explorar</Link>
-          <Link href="/mi-mapa-emocional">Mis creaciones</Link>
+          {footerLinks.map((link) => (
+            <Link href={link.href} key={link.href}>
+              {link.label}
+            </Link>
+          ))}
         </nav>
       </div>
     </footer>
