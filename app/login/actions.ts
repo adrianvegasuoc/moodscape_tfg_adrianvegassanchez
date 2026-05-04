@@ -39,7 +39,7 @@ export async function loginAction(formData: FormData) {
   const password = getStringValue(formData.get("password"));
 
   if (!email || !password) {
-    redirect(buildAuthRedirect("/login", "Completa email y password.", "error"));
+    redirect(buildAuthRedirect("/login", "Completa email y contraseña.", "error"));
   }
 
   // Este cliente comparte el contexto de cookies de la peticion actual.
@@ -66,7 +66,7 @@ export async function registerAction(formData: FormData) {
   const password = getStringValue(formData.get("password"));
 
   if (!email || !password) {
-    redirect(buildAuthRedirect("/register", "Completa email y password.", "error"));
+    redirect(buildAuthRedirect("/register", "Completa email y contraseña.", "error"));
   }
 
   // Necesitamos conocer el origen actual para construir una URL absoluta de callback.

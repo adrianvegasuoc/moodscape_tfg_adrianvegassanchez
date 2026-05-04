@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { Route } from "next";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { PublicAccessLink, PublicHeaderLinks } from "@/components/public-header-links";
 import { UserMenu } from "@/components/user-menu";
 import { getUserHandle, getUserInitial } from "@/lib/user";
 
@@ -9,11 +10,6 @@ const privateNavItems = [
   { href: "/" as Route, label: "Inicio" },
   { href: "/explorar" as Route, label: "Explorar" },
   { href: "/mi-mapa-emocional" as Route, label: "Mis creaciones" }
-];
-
-const publicNavItems = [
-  { href: "/explorar" as Route, label: "Descubre Moodscape" },
-  { href: "/login" as Route, label: "Cómo funciona" }
 ];
 
 async function getCurrentUserIdentity() {
@@ -42,18 +38,21 @@ export async function AppHeader() {
   const userEmail = userIdentity?.email ?? null;
   const userLabel = userIdentity?.label ?? "Acceder";
   const userInitial = userIdentity?.initial ?? userLabel.slice(0, 1).toUpperCase();
-  const navItems = userEmail ? privateNavItems : publicNavItems;
 
   return (
     <header className="app-header">
       <div className="top-nav">
-        <nav aria-label="Principal" className="top-nav-links">
-          {navItems.map((item) => (
-            <Link className="nav-link" href={item.href} key={item.href}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
+        {userEmail ? (
+          <nav aria-label="Principal" className="top-nav-links">
+            {privateNavItems.map((item) => (
+              <Link className="nav-link" href={item.href} key={item.href}>
+                {item.label}
+              </Link>
+            ))}
+          </nav>
+        ) : (
+          <PublicHeaderLinks />
+        )}
 
         <Link className="wordmark" href="/">
           MOODSCAPE
@@ -63,12 +62,7 @@ export async function AppHeader() {
           {userEmail ? (
             <UserMenu userEmail={userEmail} userInitial={userInitial} userLabel={userLabel} />
           ) : (
-            <Link className="user-link" href="/login">
-              <span className="user-name">{userLabel}</span>
-              <span aria-hidden="true" className="user-avatar">
-                {userInitial}
-              </span>
-            </Link>
+            <PublicAccessLink />
           )}
         </div>
       </div>
