@@ -13,24 +13,24 @@ type ImageGenerationFormProps = {
 };
 
 const suggestionChips = [
-  "Feliz",
+  "Calma",
+  "Alegría",
+  "Nostalgia",
+  "Esperanza",
+  "Familia",
   "Viaje",
-  "Paseo",
-  "Amanecer",
-  "Amigos",
-  "Pueblo",
-  "Deporte",
   "Naturaleza",
-  "Enfermo",
-  "Motivado",
-  "Tren",
-  "Playa",
-  "Estrés",
-  "Café",
-  "Fiesta"
+  "Amistad",
+  "Atardecer",
+  "Mar",
+  "Paseo",
+  "Fiesta",
+  "Recuerdo",
+  "Sueño",
+  "Energía"
 ];
 
-const INITIAL_VISIBLE_CHIPS = 5;
+const INITIAL_VISIBLE_CHIPS = 10;
 
 function appendChipToPrompt(currentPrompt: string, chip: string) {
   const normalizedChip = chip.toLocaleLowerCase("es-ES");
@@ -76,7 +76,12 @@ export function ImageGenerationForm({ message, type }: ImageGenerationFormProps)
 
   return (
     <section className="creation-screen">
-      <h1 className="creation-title">¿Qué vas a crear hoy?</h1>
+      <div className="creation-heading">
+        <h1 className="creation-title">¿Qué quieres expresar hoy?</h1>
+        <p className="creation-subtitle">
+          Describe una emoción, un recuerdo o una sensación. Moodscape lo convertirá en imagen.
+        </p>
+      </div>
 
       <div className="chip-group" aria-label="Sugerencias de inspiracion">
         {visibleChips.map((chip) => (
@@ -128,14 +133,12 @@ export function ImageGenerationForm({ message, type }: ImageGenerationFormProps)
             setPrompt(event.target.value);
             setClientError("");
           }}
-          placeholder={
-            "Describe un momento, una sensacion o un recuerdo...\n“Día inolvidable en mi pueblo con mi familia rodeados de naturaleza”\n“Viaje, amigos, México, jacarandas”"
-          }
+          placeholder="Ejemplo: una tarde tranquila con mi familia junto al mar..."
           rows={5}
           required
           value={prompt}
         />
-        <GenerateImageSubmitButton />
+        <GenerateImageSubmitButton disabled={!prompt.trim()} />
       </form>
     </section>
   );

@@ -1,6 +1,11 @@
+import { AuthSubmitButton } from "@/components/auth-submit-button";
+
 type AuthFormProps = {
   title: string;
   description: string;
+  forgotPasswordHref?: string;
+  forgotPasswordLabel?: string;
+  passwordHint?: string;
   submitLabel: string;
   passwordAutoComplete?: "current-password" | "new-password";
   alternateText: string;
@@ -13,6 +18,9 @@ type AuthFormProps = {
 export function AuthForm({
   title,
   description,
+  forgotPasswordHref,
+  forgotPasswordLabel = "¿Olvidaste tu contraseña?",
+  passwordHint,
   submitLabel,
   passwordAutoComplete = "current-password",
   alternateText,
@@ -43,12 +51,17 @@ export function AuthForm({
               minLength={6}
               required
             />
+            {passwordHint ? <small>{passwordHint}</small> : null}
           </label>
 
+          {forgotPasswordHref ? (
+            <a className="auth-secondary-link" href={forgotPasswordHref}>
+              {forgotPasswordLabel}
+            </a>
+          ) : null}
+
           <div className="button-row">
-            <button className="primary-button" type="submit">
-              {submitLabel}
-            </button>
+            <AuthSubmitButton label={submitLabel} />
             <a className="secondary-button" href={alternateHref}>
               {alternateLabel}
             </a>

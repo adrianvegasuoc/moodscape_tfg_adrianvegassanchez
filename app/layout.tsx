@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { AppHeader } from "@/components/app-header";
+import { AppFooter } from "@/components/app-footer";
 
 import "./globals.css";
 
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body>
         <AppHeader />
         {children}
+        <AppFooter />
       </body>
     </html>
   );

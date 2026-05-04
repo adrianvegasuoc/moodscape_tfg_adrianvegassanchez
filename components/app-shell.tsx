@@ -1,7 +1,7 @@
 const sections = [
   { href: "/dashboard", label: "Crear", description: "Genera piezas visuales desde un prompt emocional." },
   { href: "/explorar", label: "Explorar", description: "Descubre tendencias, referencias y atmosferas visuales." },
-  { href: "/login", label: "Acceder", description: "Entra para guardar historial y continuar creando." }
+  { href: "/login", label: "Iniciar sesión", description: "Entra para guardar historial y continuar creando." }
 ];
 
 export function AppShell() {

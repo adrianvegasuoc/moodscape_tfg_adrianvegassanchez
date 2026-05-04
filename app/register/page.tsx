@@ -23,12 +23,13 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
     <AuthForm
       // En registro cambiamos solo los textos y el autocomplete del password.
       title="Crear cuenta"
-      description="Registra un usuario con email y password para acceder al panel."
+      description="Registra un usuario con email y contraseña para acceder"
       submitLabel="Registrarse"
       passwordAutoComplete="new-password"
+      passwordHint="Mínimo 6 caracteres"
       alternateText="¿Ya tienes cuenta?"
       alternateHref="/login"
-      alternateLabel="Inicia sesion"
+      alternateLabel="Iniciar sesión"
       action={registerAction}
     >
       {/* Mostramos aqui errores de alta o mensajes posteriores al registro. */}

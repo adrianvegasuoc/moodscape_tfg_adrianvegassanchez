@@ -3,7 +3,10 @@ import { redirect } from "next/navigation";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-type AuthPagePath = "/login" | "/register";
+type AuthPagePath = "/actualizar-password" | "/login" | "/recuperar-password" | "/register";
+type RequireAuthenticatedUserOptions = {
+  showLoginMessage?: boolean;
+};
 
 // Reutilizamos este guard en las paginas publicas para sacar de ahi a usuarios ya autenticados.
 export async function redirectIfAuthenticated() {
@@ -18,13 +21,18 @@ export async function redirectIfAuthenticated() {
 }
 
 // Este guard centraliza la proteccion de rutas privadas como dashboard.
-export async function requireAuthenticatedUser() {
+export async function requireAuthenticatedUser(options: RequireAuthenticatedUserOptions = {}) {
+  const { showLoginMessage = true } = options;
   const supabase = await createServerSupabaseClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
 
   if (!user) {
+    if (!showLoginMessage) {
+      redirect("/login" as Route);
+    }
+
     redirect("/login?message=Debes%20iniciar%20sesion%20para%20continuar.&type=error" as Route);
   }
 
