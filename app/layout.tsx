@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 
 import { AppHeader } from "@/components/app-header";
 import { AppFooter } from "@/components/app-footer";
 
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter"
+});
 
 export const metadata: Metadata = {
   title: "Moodscape",
@@ -17,7 +24,7 @@ type RootLayoutProps = {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="es">
+    <html className={inter.variable} lang="es">
       <body>
         <AppHeader />
         {children}
