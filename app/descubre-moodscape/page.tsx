@@ -1,9 +1,18 @@
 import Link from "next/link";
 
 const howItWorksSteps = [
-  "Describe una emoción",
-  "Moodscape genera una imagen",
-  "Explora conexiones visuales"
+  {
+    title: "Describe una emoción",
+    subtitle: "Mañana de domingo en el rastro de Madrid"
+  },
+  {
+    title: "Moodscape genera una imagen",
+    subtitle: "La IA interpreta tu recuerdo y lo convierte en una escena visual única"
+  },
+  {
+    title: "Explora conexiones visuales",
+    subtitle: "Descubre momentos afines creados por otras personas y emociones compartidas"
+  }
 ];
 
 export default function DiscoverMoodscapePage() {
@@ -20,9 +29,6 @@ export default function DiscoverMoodscapePage() {
         <div className="discover-video-placeholder">
           <strong>Aquí se mostrará la demo de la experiencia</strong>
         </div>
-        <p>
-          Más adelante se incorporará un vídeo explicativo del flujo completo de la plataforma.
-        </p>
       </section>
 
       <section className="discover-steps-section" id="como-funciona">
@@ -31,9 +37,10 @@ export default function DiscoverMoodscapePage() {
         </div>
         <div className="discover-steps-grid">
           {howItWorksSteps.map((step, index) => (
-            <article className="discover-step-card" key={step}>
+            <article className="discover-step-card" key={step.title}>
               <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{step}</h3>
+              <h3>{step.title}</h3>
+              <p>{step.subtitle}</p>
             </article>
           ))}
         </div>

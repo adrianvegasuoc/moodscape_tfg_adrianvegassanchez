@@ -6,12 +6,14 @@ import { PublicAccessLink, PublicHeaderLinks } from "@/components/public-header-
 import { UserMenu } from "@/components/user-menu";
 import { getUserHandle, getUserInitial } from "@/lib/user";
 
+// Rutas principales que solo se muestran cuando existe una sesion activa.
 const privateNavItems = [
   { href: "/" as Route, label: "Inicio" },
   { href: "/explorar" as Route, label: "Explorar" },
   { href: "/mi-mapa-emocional" as Route, label: "Mis creaciones" }
 ];
 
+// El header es un Server Component: lee la sesion en servidor para decidir la navegacion inicial.
 async function getCurrentUserIdentity() {
   try {
     const supabase = await createServerSupabaseClient();
@@ -42,6 +44,7 @@ export async function AppHeader() {
   return (
     <header className="app-header">
       <div className="top-nav">
+        {/* Navegacion contextual: privada con sesion, publica sin sesion. */}
         {userEmail ? (
           <nav aria-label="Principal" className="top-nav-links">
             {privateNavItems.map((item) => (
@@ -58,6 +61,7 @@ export async function AppHeader() {
           MOODSCAPE
         </Link>
 
+        {/* Acceso de usuario: menu de cuenta autenticada o enlace publico a login. */}
         <div className="top-nav-user">
           {userEmail ? (
             <UserMenu userEmail={userEmail} userInitial={userInitial} userLabel={userLabel} />

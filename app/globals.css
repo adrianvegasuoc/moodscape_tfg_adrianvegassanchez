@@ -535,6 +535,13 @@ code {
   line-height: 1.35;
 }
 
+.discover-step-card p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-small);
+  line-height: 1.5;
+}
+
 .discover-cta {
   display: flex;
   justify-content: center;
