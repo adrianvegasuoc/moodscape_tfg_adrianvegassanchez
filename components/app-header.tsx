@@ -35,6 +35,7 @@ async function getCurrentUserIdentity() {
   }
 }
 
+// El header se renderiza en todas las paginas, asi que es un buen lugar para cargar la sesion del usuario y mostrar una navegacion personalizada. 
 export async function AppHeader() {
   const userIdentity = await getCurrentUserIdentity();
   const userEmail = userIdentity?.email ?? null;

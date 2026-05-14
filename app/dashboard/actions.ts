@@ -87,9 +87,13 @@ export async function generateImageAction(formData: FormData) {
       }
     }
 
-    const message =
-      error instanceof Error ? error.message : "No se pudo generar y guardar la imagen.";
-    redirect(buildDashboardRedirect(message, "error"));
+    console.error("Image generation failed", error);
+    redirect(
+      buildDashboardRedirect(
+        "No se pudo generar la imagen en este momento. Inténtalo de nuevo más tarde.",
+        "error"
+      )
+    );
   }
 
   revalidatePath("/");
