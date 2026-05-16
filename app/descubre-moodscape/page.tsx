@@ -26,8 +26,15 @@ export default function DiscoverMoodscapePage() {
       </section>
 
       <section className="discover-video-section" aria-label="Demo de Moodscape">
-        <div className="discover-video-placeholder">
-          <strong>Aquí se mostrará la demo de la experiencia</strong>
+        <div className="discover-video-frame">
+          <iframe
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="strict-origin-when-cross-origin"
+            src="https://www.youtube.com/embed/kTyfu_yJ5ms"
+            title="Demo de Moodscape"
+          />
         </div>
       </section>
 
