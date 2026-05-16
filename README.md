@@ -45,7 +45,6 @@ El MVP incluye:
 ### Privadas
 
 - `/`
-- `/dashboard`
 - `/mi-mapa-emocional`
 - `/perfil`
 

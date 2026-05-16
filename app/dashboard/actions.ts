@@ -15,7 +15,7 @@ function getStringValue(value: FormDataEntryValue | null) {
   return typeof value === "string" ? value.trim() : "";
 }
 
-// Los mensajes del dashboard viajan por query params para mantener la pagina simple.
+// Los mensajes de la Home privada viajan por query params para mantener la pagina simple.
 function buildDashboardRedirect(
   message: string,
   type: "success" | "error",
@@ -38,7 +38,7 @@ export async function generateImageAction(formData: FormData) {
   // El guard devuelve tanto el usuario como el cliente autenticado listo para consultar RLS.
   const { supabase, user } = await requireAuthenticatedUser();
 
-  // Extraemos y normalizamos los campos del formulario enviado desde dashboard.
+  // Extraemos y normalizamos los campos del formulario enviado desde la Home privada.
   const prompt = getStringValue(formData.get("prompt"));
   const isPublic = formData.get("is_public") === "on";
   const promptValidation = validatePrompt(prompt);
@@ -97,7 +97,6 @@ export async function generateImageAction(formData: FormData) {
   }
 
   revalidatePath("/");
-  revalidatePath("/dashboard");
   revalidatePath("/mi-mapa-emocional");
   redirect(
     buildDashboardRedirect("Imagen generada y guardada correctamente.", "success", createdPostId)

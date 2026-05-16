@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   // "next" permite volver a una ruta concreta despues del login.
   const next = requestUrl.searchParams.get("next");
   // Solo aceptamos rutas internas para evitar redirecciones abiertas.
-  const nextPath = next && next.startsWith("/") ? next : "/dashboard";
+  const nextPath = next && next.startsWith("/") ? next : "/";
 
   if (code) {
     // Creamos un cliente server-side porque el intercambio del codigo debe hacerse en servidor.

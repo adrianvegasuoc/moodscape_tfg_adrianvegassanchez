@@ -84,7 +84,6 @@ export async function updateProfileAction(formData: FormData) {
   }
 
   revalidatePath("/", "layout");
-  revalidatePath("/dashboard");
   revalidatePath("/perfil");
   redirect(buildProfileRedirect("Perfil actualizado correctamente.", "success"));
 }

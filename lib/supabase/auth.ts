@@ -20,7 +20,7 @@ export async function redirectIfAuthenticated() {
   }
 }
 
-// Este guard centraliza la proteccion de rutas privadas como dashboard.
+// Este guard centraliza la proteccion de rutas privadas.
 export async function requireAuthenticatedUser(options: RequireAuthenticatedUserOptions = {}) {
   const { showLoginMessage = true } = options;
   const supabase = await createServerSupabaseClient();
