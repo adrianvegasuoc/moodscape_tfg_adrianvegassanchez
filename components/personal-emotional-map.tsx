@@ -19,6 +19,10 @@ function formatTag(term: string) {
   return `#${term.charAt(0).toLocaleUpperCase("es-ES")}${term.slice(1)}`;
 }
 
+function buildExploreTermHref(term: string) {
+  return `/explorar/${encodeURIComponent(term.toLocaleLowerCase("es-ES"))}` as Route;
+}
+
 function buildPromptTitle(prompt: string) {
   const trimmedPrompt = prompt.trim();
 
@@ -154,9 +158,14 @@ export function PersonalEmotionalMap({ posts }: PersonalEmotionalMapProps) {
             <h2 id="personal-tags-title">Explora tus emociones recurrentes</h2>
             <div className="personal-tag-list">
               {emotionTags.map((tag) => (
-                <span className="personal-tag" key={tag}>
+                <Link
+                  aria-label={`Explorar creaciones relacionadas con ${tag}`}
+                  className="personal-tag"
+                  href={buildExploreTermHref(tag)}
+                  key={tag}
+                >
                   {formatTag(tag)}
-                </span>
+                </Link>
               ))}
             </div>
           </section>
