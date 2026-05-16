@@ -3,8 +3,8 @@ import type { Route } from "next";
 
 const inspirationTags: Array<{ href: Route; label: string }> = [
   { href: "/explorar/calma" as Route, label: "Calma" },
-  { href: "/explorar/recuerdos" as Route, label: "Recuerdos" },
-  { href: "/explorar/paisajes" as Route, label: "Paisajes" },
+  { href: "/explorar/recuerdo" as Route, label: "Recuerdo" },
+  { href: "/explorar/paisaje" as Route, label: "Paisaje" },
   { href: "/explorar/atardecer" as Route, label: "Atardecer" },
   { href: "/explorar/sueno" as Route, label: "Sueño" },
   { href: "/explorar/familia" as Route, label: "Familia" }
