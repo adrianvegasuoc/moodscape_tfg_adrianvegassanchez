@@ -45,7 +45,6 @@ El MVP incluye:
 ### Privadas
 
 - `/`
-- `/crear`
 - `/dashboard`
 - `/mi-mapa-emocional`
 - `/perfil`
@@ -226,4 +225,3 @@ El despliegue objetivo es Vercel.
   avanzado todavia.
 - La recuperacion de contrasena depende de la configuracion de email y limites
   de envio de Supabase.
-

@@ -70,7 +70,6 @@ code {
   background: var(--color-surface-soft);
 }
 
-.landing h1,
 .discover-hero h1,
 .creation-title,
 .personal-map-hero h1,
@@ -97,9 +96,7 @@ code {
   line-height: 1.5;
 }
 
-.section-block h2,
 .discover-section-heading h2,
-.panel h2,
 .inspiration-card h2,
 .personal-tags-panel h2,
 .personal-empty-state h2,
@@ -332,38 +329,6 @@ code {
   font-weight: var(--font-weight-medium);
 }
 
-.landing {
-  padding: 4rem 3rem;
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  background: rgba(var(--color-surface-rgb), 0.78);
-  box-shadow: var(--shadow);
-  text-align: center;
-}
-
-.landing h1 {
-  margin: 0;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-display);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
-.landing-subtitle {
-  margin: 0.5rem 0 0;
-  color: var(--muted);
-  font-size: 1.15rem;
-  font-weight: var(--font-weight-semibold);
-}
-
-.landing p {
-  max-width: 40rem;
-  margin: 1rem auto 0;
-  color: var(--muted);
-  line-height: 1.6;
-}
-
 .creation-hero {
   margin-top: 1rem;
 }
@@ -381,50 +346,6 @@ code {
 .home-page {
   gap: 2.5rem;
   padding-top: 1.25rem;
-}
-
-.status-message {
-  font-weight: var(--font-weight-semibold);
-}
-
-.section-block {
-  margin-top: 3rem;
-}
-
-.section-block h2 {
-  margin: 0 0 1.25rem;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-
-.route-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1.25rem;
-}
-
-.route-card {
-  display: block;
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  background: rgba(var(--color-surface-rgb), 0.78);
-  box-shadow: var(--shadow);
-}
-
-.route-card strong {
-  display: block;
-  margin-bottom: 0.5rem;
-  color: var(--foreground-strong);
-  font-size: 1.05rem;
-}
-
-.route-card span {
-  color: var(--muted);
-  line-height: 1.5;
 }
 
 .discover-page {
@@ -735,54 +656,6 @@ code {
   background: rgba(var(--color-primary-rgb), 0.08);
   border-color: rgba(var(--color-primary-rgb), 0.24);
   color: var(--color-text-primary);
-}
-
-.dashboard-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 1rem 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: rgba(var(--color-surface-rgb), 0.78);
-  box-shadow: var(--shadow);
-}
-
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-.history-panel {
-  margin-top: 1rem;
-}
-
-.panel {
-  padding: 1.5rem;
-  border: 1px solid var(--border);
-  border-radius: 22px;
-  background: rgba(var(--color-surface-rgb), 0.78);
-  box-shadow: var(--shadow);
-}
-
-.panel h2 {
-  margin: 0 0 0.75rem;
-  color: var(--color-text-primary);
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1.25;
-}
-
-.creation-panel {
-  padding: 2rem;
-}
-
-.creation-intro {
-  margin-top: 0.25rem;
 }
 
 .chip-group {
@@ -1780,22 +1653,6 @@ code {
   height: 1rem;
 }
 
-.posts-list {
-  display: grid;
-  gap: 1rem;
-  padding: 0;
-  margin: 1rem 0 0;
-  list-style: none;
-}
-
-.post-item {
-  padding: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--color-surface);
-}
-
-.post-image,
 .generated-image {
   width: 100%;
   height: auto;
@@ -1810,28 +1667,6 @@ code {
   max-height: 27rem;
   margin-top: 0;
   border-radius: 0;
-}
-
-.post-image {
-  max-height: 12rem;
-}
-
-.post-item p {
-  margin: 0.75rem 0;
-  line-height: 1.6;
-}
-
-.post-item a {
-  color: var(--color-primary-hover);
-  word-break: break-word;
-}
-
-.post-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  color: var(--muted);
-  font-size: 0.95rem;
 }
 
 @media (max-width: 900px) {
@@ -1860,10 +1695,6 @@ code {
     flex-wrap: wrap;
   }
 
-  .route-grid {
-    grid-template-columns: 1fr;
-  }
-
   .discover-steps-grid {
     grid-template-columns: 1fr;
   }
@@ -1873,30 +1704,11 @@ code {
     border-radius: 22px;
   }
 
-  .landing {
-    padding: 2rem 1.5rem;
-  }
-
   .auth-card {
     padding: 1.5rem;
   }
 
-  .dashboard-header {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .post-meta {
-    flex-direction: column;
-    gap: 0.35rem;
-  }
-
   .button-row,
-  .dashboard-grid,
   .emotional-map-grid-full,
   .personal-gallery,
   .personal-summary-grid,
