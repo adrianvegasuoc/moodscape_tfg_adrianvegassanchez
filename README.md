@@ -49,6 +49,11 @@ El MVP incluye:
 - `/explorar`
 - `/explorar/[term]`
 
+### Técnicas
+
+- `/auth/callback`: callback de Supabase Auth para confirmación de email, recuperación de contraseña y creación de sesión.
+- `/dashboard`: alias legacy que redirige a `/`.
+
 ## Generación de imágenes
 
 La generación está encapsulada en:
