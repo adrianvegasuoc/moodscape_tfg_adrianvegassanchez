@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
+function isMissingPkceVerifierError(message: string) {
+  const normalizedMessage = message.toLocaleLowerCase("en-US");
+
+  return (
+    normalizedMessage.includes("pkce") ||
+    normalizedMessage.includes("code verifier")
+  );
+}
+
 // Supabase redirige aqui despues de confirmar email o de completar el flujo OAuth/magic link.
 // El objetivo de esta ruta es convertir el "code" recibido en una sesion real de Supabase.
 export async function GET(request: Request) {
@@ -21,9 +30,22 @@ export async function GET(request: Request) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
 
     if (error) {
-      // Si falla el intercambio, enviamos al usuario a login con un mensaje legible en UI.
+      console.error("Auth callback failed", {
+        message: error.message,
+        name: error.name,
+        status: error.status
+      });
+
+      if (isMissingPkceVerifierError(error.message)) {
+        return NextResponse.redirect(new URL("/login", requestUrl.origin));
+      }
+
+      // Si falla el intercambio, evitamos exponer detalles tecnicos de Supabase en UI.
       const errorUrl = new URL("/login", requestUrl.origin);
-      errorUrl.searchParams.set("message", error.message);
+      errorUrl.searchParams.set(
+        "message",
+        "No se ha podido completar el acceso. Inténtalo de nuevo."
+      );
       errorUrl.searchParams.set("type", "error");
 
       return NextResponse.redirect(errorUrl);

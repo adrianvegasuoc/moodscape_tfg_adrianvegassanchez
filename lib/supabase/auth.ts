@@ -5,6 +5,7 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 type AuthPagePath = "/actualizar-password" | "/login" | "/recuperar-password" | "/register";
 type RequireAuthenticatedUserOptions = {
+  redirectTo?: Route;
   showLoginMessage?: boolean;
 };
 
@@ -22,15 +23,15 @@ export async function redirectIfAuthenticated() {
 
 // Este guard centraliza la proteccion de rutas privadas.
 export async function requireAuthenticatedUser(options: RequireAuthenticatedUserOptions = {}) {
-  const { showLoginMessage = true } = options;
+  const { redirectTo = "/descubre-moodscape" as Route, showLoginMessage = false } = options;
   const supabase = await createServerSupabaseClient();
   const {
     data: { user }
   } = await supabase.auth.getUser();
 
   if (!user) {
-    if (!showLoginMessage) {
-      redirect("/login" as Route);
+    if (redirectTo !== "/login" || !showLoginMessage) {
+      redirect(redirectTo);
     }
 
     redirect("/login?message=Debes%20iniciar%20sesion%20para%20continuar.&type=error" as Route);
