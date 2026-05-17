@@ -5,14 +5,23 @@ import type { Route } from "next";
 import { redirect } from "next/navigation";
 
 import { requireAuthenticatedUser } from "@/lib/supabase/auth";
-import { createUserPost } from "@/lib/supabase/posts";
+import { createUserPost, getUserCreationCountSince } from "@/lib/supabase/posts";
 import { removeGeneratedImage, uploadGeneratedImage } from "@/lib/supabase/storage";
 import { validatePrompt } from "@/lib/validation/prompt-validation";
 import { generateMoodscapeImage } from "@/services/openai/image-generation";
 
+const DAILY_CREATION_LIMIT = 3;
+
 // Utilidad basica para leer valores de formularios HTML sin repetir comprobaciones.
 function getStringValue(value: FormDataEntryValue | null) {
   return typeof value === "string" ? value.trim() : "";
+}
+
+function getServerDayStartIso() {
+  const dayStart = new Date();
+  dayStart.setHours(0, 0, 0, 0);
+
+  return dayStart.toISOString();
 }
 
 // Los mensajes de la Home privada viajan por query params para mantener la pagina simple.
@@ -53,6 +62,20 @@ export async function generateImageAction(formData: FormData) {
   }
 
   const sanitizedPrompt = promptValidation.sanitizedPrompt;
+  const todayCreationCount = await getUserCreationCountSince(
+    supabase,
+    user.id,
+    getServerDayStartIso()
+  );
+
+  if (todayCreationCount >= DAILY_CREATION_LIMIT) {
+    redirect(
+      buildDashboardRedirect(
+        "Has alcanzado el límite diario de creaciones. Vuelve mañana.",
+        "error"
+      )
+    );
+  }
 
   let uploadedImagePath: string | undefined;
   let createdPostId: string | undefined;

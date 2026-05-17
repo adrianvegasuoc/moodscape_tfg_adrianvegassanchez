@@ -144,6 +144,25 @@ export async function createUserPost(
   return data;
 }
 
+export async function getUserCreationCountSince(
+  supabase: AuthenticatedSupabaseClient,
+  userId: string,
+  since: string
+): Promise<number> {
+  const { count, error } = await supabase
+    .from("posts")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", userId)
+    .not("image_url", "is", null)
+    .gte("created_at", since);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return count ?? 0;
+}
+
 function normalizePromptWord(word: string) {
   return word
     .toLocaleLowerCase("es-ES")
