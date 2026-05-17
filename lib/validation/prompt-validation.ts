@@ -1,3 +1,23 @@
+/**
+ * Utilidades de validación y moderación básica para prompts de Moodscape.
+ *
+ * Este módulo aplica una primera capa defensiva antes de enviar texto de usuario
+ * al backend y a OpenAI: normaliza el prompt, limita su longitud y bloquea
+ * lenguaje explícitamente prohibido o patrones técnicos de abuso.
+ *
+ * Esta validación no sustituye una moderación semántica avanzada ni una revisión
+ * contextual del contenido. Debe ejecutarse siempre también en servidor antes de
+ * llamar a OpenAI, aunque exista validación previa en la interfaz.
+ *
+ * @module
+ */
+
+/**
+ * Longitud máxima aceptada para un prompt de usuario.
+ *
+ * El límite protege la experiencia de escritura, reduce entradas excesivas y
+ * evita enviar textos innecesariamente largos al flujo de generación.
+ */
 export const MAX_PROMPT_LENGTH = 300;
 
 const DISALLOWED_LANGUAGE_MESSAGE =
@@ -69,9 +89,18 @@ const HTML_SCRIPT_PATTERNS = [
   /<[^>]+>/
 ];
 
+/**
+ * Resultado normalizado de la validación de un prompt.
+ *
+ * El contrato lo comparten cliente y servidor para mantener los mismos mensajes
+ * de usuario y asegurar que solo se envían prompts saneados a la generación.
+ */
 export type PromptValidationResult = {
+  /** Indica si el prompt puede continuar hacia el flujo de generación. */
   valid: boolean;
+  /** Mensaje claro para el usuario cuando la validación falla. */
   reason?: string;
+  /** Prompt normalizado y seguro para usar cuando `valid` es `true`. */
   sanitizedPrompt?: string;
 };
 
@@ -87,6 +116,12 @@ function normalizePromptWithoutLimit(text: string) {
     .trim();
 }
 
+/**
+ * Normaliza un prompt para comparación y uso posterior.
+ *
+ * Convierte el texto a minúsculas, elimina caracteres de control, normaliza
+ * acentos, compacta espacios y aplica el límite máximo de longitud.
+ */
 export function normalizePrompt(text: string): string {
   return normalizePromptWithoutLimit(text).slice(0, MAX_PROMPT_LENGTH);
 }
@@ -104,6 +139,15 @@ function containsBlockedPattern(text: string) {
   );
 }
 
+/**
+ * Valida un prompt de usuario antes de permitir la generación de imagen.
+ *
+ * Comprueba que el texto no esté vacío, no supere la longitud máxima, no contenga
+ * palabras prohibidas y no incluya patrones básicos de inyección SQL o HTML/script.
+ *
+ * La longitud se valida antes del recorte final para detectar prompts demasiado
+ * largos en lugar de truncarlos silenciosamente.
+ */
 export function validatePrompt(text: string): PromptValidationResult {
   const normalizedPrompt = normalizePromptWithoutLimit(text);
 

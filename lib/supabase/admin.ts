@@ -7,7 +7,7 @@ import { getServiceRoleKey, getSupabaseEnv, hasServiceRoleKey } from "@/lib/env"
 import { getUserHandle } from "@/lib/user";
 import type { Database } from "@/types/database";
 
-// Este cliente queda reservado para operaciones de servidor que requieran permisos elevados.
+/** Crea un cliente administrativo reservado para operaciones de servidor con service role. */
 export function createAdminSupabaseClient() {
   const env = getSupabaseEnv();
 
@@ -23,7 +23,7 @@ export function createAdminSupabaseClient() {
   );
 }
 
-// Este helper obtiene el nick de un usuario desde auth.users sin exponer permisos al cliente.
+/** Obtiene el identificador visible de un usuario desde Auth sin exponer la service role al cliente. */
 export async function getUserHandleById(userId: string) {
   if (!hasServiceRoleKey()) {
     return null;

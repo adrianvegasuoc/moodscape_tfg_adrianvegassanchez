@@ -8,7 +8,6 @@ import { headers } from "next/headers";
 import { buildAuthRedirect } from "@/lib/supabase/auth";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
-// Normalizamos los campos del formulario antes de enviarlos a Supabase.
 function getStringValue(value: FormDataEntryValue | null) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -47,10 +46,8 @@ function isNonDisclosureRecoveryError(error: { message?: string; status?: number
   return error.status === 404 || message.includes("not found") || message.includes("not exist");
 }
 
-// Server Action del formulario de login.
-// Se ejecuta en el servidor, valida los campos basicos y deja que Supabase cree la sesion.
+/** Inicia sesión con email y contraseña y fuerza la relectura de la sesión en el layout. */
 export async function loginAction(formData: FormData) {
-  // Leemos y limpiamos los valores enviados por el formulario HTML.
   const email = getStringValue(formData.get("email"));
   const password = getStringValue(formData.get("password"));
 
@@ -58,9 +55,7 @@ export async function loginAction(formData: FormData) {
     redirect(buildAuthRedirect("/login", "Completa email y contraseña.", "error"));
   }
 
-  // Este cliente comparte el contexto de cookies de la peticion actual.
   const supabase = await createServerSupabaseClient();
-  // Supabase valida las credenciales y, si son correctas, escribe la sesion en cookies.
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -70,13 +65,11 @@ export async function loginAction(formData: FormData) {
     redirect(buildAuthRedirect("/login", error.message, "error"));
   }
 
-  // Revalidamos el layout para que los componentes server lean la sesion actualizada.
   revalidatePath("/", "layout");
   redirect("/" as Route);
 }
 
-// Server Action del formulario de registro.
-// Crea el usuario en Supabase y define la URL a la que se volvera tras confirmar el email.
+/** Registra una cuenta y configura el callback de confirmación de email de Supabase. */
 export async function registerAction(formData: FormData) {
   const email = getStringValue(formData.get("email"));
   const password = getStringValue(formData.get("password"));
@@ -85,11 +78,9 @@ export async function registerAction(formData: FormData) {
     redirect(buildAuthRedirect("/register", "Completa email y contraseña.", "error"));
   }
 
-  // Necesitamos conocer el origen actual para construir una URL absoluta de callback.
   const headersStore = await headers();
   const origin = getOriginFromHeaders(headersStore);
   const supabase = await createServerSupabaseClient();
-  // emailRedirectTo indica a Supabase donde debe devolver al usuario al confirmar la cuenta.
   const { error } = await supabase.auth.signUp({
     email,
     password,
@@ -102,7 +93,6 @@ export async function registerAction(formData: FormData) {
     redirect(buildAuthRedirect("/register", error.message, "error"));
   }
 
-  // Tras el alta, mostramos un mensaje simple y dejamos que el usuario confirme su correo si aplica.
   redirect(
     buildAuthRedirect(
       "/login",
@@ -112,7 +102,7 @@ export async function registerAction(formData: FormData) {
   );
 }
 
-// Solicita a Supabase el envio del email de recuperacion sin revelar si la cuenta existe.
+/** Solicita recuperación de contraseña sin revelar si el email existe en Supabase Auth. */
 export async function recoverPasswordAction(formData: FormData) {
   const email = getStringValue(formData.get("email"));
 
@@ -152,7 +142,7 @@ export async function recoverPasswordAction(formData: FormData) {
   );
 }
 
-// Guarda una nueva contraseña tras abrir el enlace de recuperacion y crear la sesion temporal.
+/** Actualiza la contraseña después de validar el enlace de recuperación y crear sesión temporal. */
 export async function updateRecoveredPasswordAction(formData: FormData) {
   const password = getStringValue(formData.get("password"));
 
@@ -204,7 +194,7 @@ export async function updateRecoveredPasswordAction(formData: FormData) {
   redirect(buildAuthRedirect("/login", "Contraseña actualizada. Inicia sesión de nuevo.", "success"));
 }
 
-// El logout borra la sesion actual de Supabase y actualiza la UI del lado servidor.
+/** Cierra la sesión en Supabase y revalida el layout para limpiar la navegación privada. */
 export async function logoutAction() {
   const supabase = await createServerSupabaseClient();
 

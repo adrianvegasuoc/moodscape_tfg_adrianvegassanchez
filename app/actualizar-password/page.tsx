@@ -20,6 +20,7 @@ export default async function UpdatePasswordPage({ searchParams }: UpdatePasswor
   } = await supabase.auth.getUser();
 
   if (!user) {
+    // El enlace de recuperación debe haber creado una sesión temporal antes de cambiar la clave.
     redirect(
       buildAuthRedirect(
         "/recuperar-password",

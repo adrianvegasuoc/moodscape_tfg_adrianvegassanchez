@@ -10,5 +10,6 @@ type HomePageProps = {
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
+  // La Home privada concentra el flujo principal y recibe feedback por query params.
   return <PrivateHome searchParams={await searchParams} />;
 }

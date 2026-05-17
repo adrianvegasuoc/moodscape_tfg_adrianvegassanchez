@@ -13,6 +13,7 @@ type RecoverPasswordPageProps = {
 };
 
 export default async function RecoverPasswordPage({ searchParams }: RecoverPasswordPageProps) {
+  // Un usuario ya autenticado no necesita solicitar recuperación de contraseña.
   await redirectIfAuthenticated();
 
   const params = await searchParams;

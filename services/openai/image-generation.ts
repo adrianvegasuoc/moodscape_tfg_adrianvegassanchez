@@ -2,15 +2,38 @@ import "server-only";
 
 import { getOpenAiApiKey, getOpenAiImageModel, isOpenAiMockMode } from "@/lib/env";
 
+/**
+ * Integración de servidor con la generación de imágenes de Moodscape.
+ *
+ * Este módulo encapsula la llamada al proveedor de imágenes y devuelve bytes
+ * listos para subir a Supabase Storage. También soporta modo mock para desarrollo
+ * y pruebas locales sin consumir la API.
+ *
+ * Variables de entorno usadas:
+ * - `OPENAI_API_KEY`: clave privada del proveedor. Solo debe existir y usarse en servidor.
+ * - `OPENAI_IMAGE_MODEL`: modelo de imagen configurable; usa `gpt-image-1` como fallback.
+ * - `OPENAI_MOCK_MODE`: si vale `"true"`, evita la llamada externa y devuelve una imagen mínima.
+ *
+ * @module
+ */
+
+/** Entrada normalizada que recibe el servicio de generación de imágenes de Moodscape. */
 export type GenerateMoodscapeImageInput = {
+  /** Prompt validado y saneado que describe la escena emocional a generar. */
   prompt: string;
+  /** Emoción principal opcional para reforzar el prompt de estilo. */
   mood?: string;
 };
 
+/** Imagen generada en bytes junto a los metadatos necesarios para guardarla en Storage. */
 export type GenerateMoodscapeImageResult = {
+  /** Contenido binario de la imagen generada. */
   bytes: Buffer;
+  /** Tipo MIME que debe usarse al subir la imagen a Storage. */
   mimeType: string;
+  /** Formato de salida solicitado al proveedor y usado como extensión de archivo. */
   outputFormat: "png" | "jpeg" | "webp";
+  /** Prompt revisado devuelto por el proveedor o prompt original en modo mock. */
   revisedPrompt: string;
 };
 
@@ -36,7 +59,13 @@ function getMockImageBuffer() {
   return Buffer.from(mockBase64, "base64");
 }
 
-// Esta capa encapsula la llamada a OpenAI y devuelve los bytes listos para subir a Storage.
+/**
+ * Genera una imagen real o mock y devuelve bytes listos para subir a Supabase Storage.
+ *
+ * En modo real requiere `OPENAI_API_KEY`; si falta, el helper de entorno lanza un
+ * error explícito. También lanza error si el proveedor responde con fallo o si la
+ * respuesta no contiene datos de imagen en base64.
+ */
 export async function generateMoodscapeImage(
   input: GenerateMoodscapeImageInput
 ): Promise<GenerateMoodscapeImageResult> {

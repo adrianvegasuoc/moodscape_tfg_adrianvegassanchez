@@ -56,6 +56,7 @@ function formatLastCreation(posts: Post[]) {
 
 function EmotionalSummary({ posts }: PersonalEmotionalMapProps) {
   const imagePosts = posts.filter((post) => post.image_url);
+  // Las estadísticas se derivan de posts con imagen para reflejar solo creaciones completadas.
   const frequentTags = buildTrendingTerms(imagePosts, 2);
   const summaryItems = [
     {
@@ -132,6 +133,7 @@ function EmptyCreationsState() {
 export function PersonalEmotionalMap({ posts }: PersonalEmotionalMapProps) {
   const imagePosts = posts.filter((post) => post.image_url);
   const recurringTags = buildTrendingTerms(imagePosts, 5);
+  // Mientras no haya suficientes datos reales, mantenemos chips de apoyo para no dejar la sección vacía.
   const emotionTags = recurringTags.length > 0 ? recurringTags : fallbackEmotionTags;
 
   return (

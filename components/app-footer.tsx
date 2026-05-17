@@ -27,6 +27,7 @@ async function hasCurrentUser() {
 }
 
 export async function AppFooter() {
+  // El footer evita exponer enlaces privados cuando todavía no existe sesión.
   const footerLinks = (await hasCurrentUser()) ? privateFooterLinks : publicFooterLinks;
 
   return (

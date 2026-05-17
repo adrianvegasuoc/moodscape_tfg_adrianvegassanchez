@@ -4,7 +4,22 @@ import { cookies } from "next/headers";
 import { getSupabaseEnv } from "@/lib/env";
 import type { Database } from "@/types/database";
 
-// Cliente server-side que comparte las cookies de la peticion actual.
+/**
+ * Cliente Supabase para componentes de servidor, acciones de servidor y rutas de servidor.
+ *
+ * El cliente se enlaza a las cookies de la petición actual para leer y actualizar
+ * la sesión del usuario autenticado. Esto permite que Supabase Auth mantenga la
+ * sesión sincronizada entre renderizado servidor, acciones y redirecciones.
+ *
+ * @module
+ */
+
+/**
+ * Crea un cliente Supabase de servidor ligado a las cookies de la petición actual.
+ *
+ * Debe usarse en código de servidor cuando se necesite consultar datos bajo la
+ * sesión real del usuario, respetando RLS y las cookies gestionadas por Supabase.
+ */
 export async function createServerSupabaseClient() {
   const cookieStore = await cookies();
   const env = getSupabaseEnv();

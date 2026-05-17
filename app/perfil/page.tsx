@@ -10,6 +10,7 @@ type PerfilPageProps = {
 };
 
 export default async function PerfilPage({ searchParams }: PerfilPageProps) {
+  // El perfil se renderiza con datos de Auth para evitar duplicar estado de usuario.
   const { user } = await requireAuthenticatedUser();
   const params = await searchParams;
 

@@ -24,8 +24,7 @@ function buildProfileRedirect(message: string, type: "error" | "success") {
   return `/perfil?${params.toString()}` as Route;
 }
 
-// Este flujo mantiene el perfil simple: metadata para el nick y reautenticacion
-// por password actual antes de permitir un cambio de clave.
+/** Actualiza nick y contraseña; para cambiar clave exige reautenticación con la contraseña actual. */
 export async function updateProfileAction(formData: FormData) {
   const { supabase, user } = await requireAuthenticatedUser();
   const username = sanitizeUsername(getStringValue(formData.get("username")));

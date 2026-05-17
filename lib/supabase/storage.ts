@@ -15,6 +15,7 @@ type UploadGeneratedImageInput = {
   userId: string;
 };
 
+/** Referencias necesarias para persistir una imagen generada o limpiarla si falla el flujo. */
 export type UploadedGeneratedImage = {
   path: string;
   publicUrl: string;
@@ -24,7 +25,7 @@ function buildGeneratedImagePath(userId: string, extension: "png" | "jpeg" | "we
   return `${userId}/${Date.now()}-${crypto.randomUUID()}.${extension}`;
 }
 
-// Las imagenes generadas se guardan en Storage y solo persistimos la URL final en posts.
+/** Sube una imagen generada al bucket público y devuelve su ruta interna y URL pública. */
 export async function uploadGeneratedImage(
   supabase: AuthenticatedSupabaseClient,
   input: UploadGeneratedImageInput
@@ -52,6 +53,7 @@ export async function uploadGeneratedImage(
   };
 }
 
+/** Elimina una imagen generada cuando se necesita revertir una creación incompleta. */
 export async function removeGeneratedImage(
   supabase: AuthenticatedSupabaseClient,
   path: string

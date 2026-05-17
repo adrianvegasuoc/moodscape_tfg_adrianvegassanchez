@@ -45,7 +45,7 @@ function appendChipToPrompt(currentPrompt: string, chip: string) {
   return `${trimmedPrompt}${separator}${normalizedChip}`;
 }
 
-// Formulario minimo para generar una imagen y guardarla automaticamente en Storage y posts.
+// La validación cliente mejora la respuesta inmediata, pero el servidor repite la comprobación.
 export function ImageGenerationForm({ message, type }: ImageGenerationFormProps) {
   const [prompt, setPrompt] = useState("");
   const [clientError, setClientError] = useState("");
@@ -122,7 +122,6 @@ export function ImageGenerationForm({ message, type }: ImageGenerationFormProps)
         </p>
       ) : null}
 
-      {/* La generacion se ejecuta en servidor para proteger las claves y la integracion con Storage. */}
       <form action={generateImageAction} className="creation-form" onSubmit={handleSubmit}>
         <input name="is_public" type="hidden" value="on" />
         <textarea

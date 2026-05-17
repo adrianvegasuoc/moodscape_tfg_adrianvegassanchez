@@ -14,6 +14,7 @@ export default async function ExplorarPage() {
     redirect("/descubre-moodscape");
   }
 
+  // Las tendencias se calculan en servidor a partir de prompts públicos ya guardados.
   const publicPosts = await getPublicPosts(supabase, 80);
   const trendTerms = buildTrendingTerms(publicPosts, 6);
   const trends = (

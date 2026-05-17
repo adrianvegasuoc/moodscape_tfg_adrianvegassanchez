@@ -1,0 +1,16 @@
+{
+  "name": "Moodscape Technical Documentation",
+  "entryPoints": [
+    "lib/validation/prompt-validation.ts",
+    "services/openai/image-generation.ts",
+    "lib/supabase/server.ts",
+    "lib/supabase/browser.ts"
+  ],
+  "out": "docs",
+  "readme": "README.md",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "excludeExternals": true,
+  "cleanOutputDir": true
+}

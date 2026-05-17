@@ -60,3 +60,14 @@ La generación está encapsulada en:
 
 ```text
 services/openai/image-generation.ts
+```
+
+## Documentación técnica
+
+La documentación técnica navegable puede generarse con:
+
+```bash
+npm run docs
+```
+
+La salida se genera en la carpeta `docs/`.

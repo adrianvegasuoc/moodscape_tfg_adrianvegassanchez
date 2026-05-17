@@ -10,6 +10,7 @@ export default async function EmotionalMapPage() {
   try {
     posts = await getUserPosts(supabase, user.id);
   } catch {
+    // La pantalla personal puede seguir mostrando su estado vacío si falla la consulta.
     posts = [];
   }
 

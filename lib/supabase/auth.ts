@@ -9,7 +9,7 @@ type RequireAuthenticatedUserOptions = {
   showLoginMessage?: boolean;
 };
 
-// Reutilizamos este guard en las paginas publicas para sacar de ahi a usuarios ya autenticados.
+/** Redirige a la Home privada cuando un usuario con sesión visita una página pública. */
 export async function redirectIfAuthenticated() {
   const supabase = await createServerSupabaseClient();
   const {
@@ -21,7 +21,7 @@ export async function redirectIfAuthenticated() {
   }
 }
 
-// Este guard centraliza la proteccion de rutas privadas.
+/** Protege rutas privadas y devuelve el usuario junto al cliente Supabase autenticado. */
 export async function requireAuthenticatedUser(options: RequireAuthenticatedUserOptions = {}) {
   const { redirectTo = "/descubre-moodscape" as Route, showLoginMessage = false } = options;
   const supabase = await createServerSupabaseClient();
@@ -40,7 +40,7 @@ export async function requireAuthenticatedUser(options: RequireAuthenticatedUser
   return { supabase, user };
 }
 
-// Los mensajes via query params mantienen la UI simple sin estado cliente extra.
+/** Construye redirecciones de autenticación con mensajes serializados en query params. */
 export function buildAuthRedirect(path: AuthPagePath, message: string, type: "error" | "success") {
   const params = new URLSearchParams({
     message,

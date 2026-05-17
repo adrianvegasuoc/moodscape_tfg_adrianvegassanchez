@@ -37,6 +37,7 @@ function buildResultHref(postId: string) {
 }
 
 export function ExploreOverview({ trends }: ExploreOverviewProps) {
+  // Separamos tendencias para dar más peso visual a las primeras sin perder exploración secundaria.
   const heroTrends = trends.slice(0, 3);
   const secondaryTrends = trends.slice(3, 5);
   const trendTerms = trends.slice(0, 6).map((trend) => trend.term);
@@ -129,6 +130,7 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
 }
 
 export function ExploreDetail({ currentTerm, posts, trends, isExpanded }: ExploreDetailProps) {
+  // La vista compacta evita una galería demasiado larga y permite expandir sin cambiar de ruta base.
   const visiblePosts = posts.length <= 3 ? posts : posts.slice(0, isExpanded ? 18 : 6);
   const shouldShowMoreButton = !isExpanded && posts.length > 6;
 

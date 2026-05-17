@@ -29,7 +29,7 @@ function buildTags(prompt: string) {
   return words.map((word) => `#${word.replace(/[^\p{L}\p{N}]/gu, "")}`).filter(Boolean);
 }
 
-// Este bloque destaca el resultado mas reciente de generacion para que el usuario vea el flujo completo.
+// Se muestra solo cuando la redirección vuelve con `post_id` tras una generación correcta.
 export function GeneratedImageResult({ post, relatedRows, authorLabel }: GeneratedImageResultProps) {
   if (!post.image_url) {
     return null;

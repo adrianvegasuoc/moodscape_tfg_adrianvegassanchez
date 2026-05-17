@@ -4,7 +4,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { getSupabaseEnv, isSupabaseConfigured } from "@/lib/env";
 import type { Database } from "@/types/database";
 
-// El proxy refresca la sesion en cada peticion para mantener las cookies sincronizadas.
+/** Refresca la sesión en el proxy para mantener sincronizadas las cookies de Supabase. */
 export async function updateSession(request: NextRequest) {
   if (!isSupabaseConfigured()) {
     return NextResponse.next({

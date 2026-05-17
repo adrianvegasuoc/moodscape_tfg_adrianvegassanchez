@@ -13,6 +13,7 @@ type CreatePostInput = {
   isPublic: boolean;
 };
 
+// Filtra conectores y términos demasiado genéricos para que Explorar muestre hashtags útiles.
 const STOP_WORDS = new Set([
   "ante",
   "aquel",
@@ -63,12 +64,11 @@ const STOP_WORDS = new Set([
   "viaje"
 ]);
 
-// Estas utilidades encapsulan el acceso a public.posts usando el usuario autenticado real.
+/** Devuelve las creaciones del usuario actual ordenadas de más recientes a más antiguas. */
 export async function getUserPosts(
   supabase: AuthenticatedSupabaseClient,
   userId: string
 ): Promise<Post[]> {
-  // Filtramos por user_id para respetar el alcance del usuario actual tambien a nivel de consulta.
   const { data, error } = await supabase
     .from("posts")
     .select("*")
@@ -82,6 +82,7 @@ export async function getUserPosts(
   return data ?? [];
 }
 
+/** Devuelve creaciones públicas con imagen para alimentar la vista Explorar. */
 export async function getPublicPosts(
   supabase: AuthenticatedSupabaseClient,
   limit = 60
@@ -101,6 +102,7 @@ export async function getPublicPosts(
   return data ?? [];
 }
 
+/** Recupera un post visible por id para mostrar el resultado recién generado o compartido. */
 export async function getVisiblePostById(
   supabase: AuthenticatedSupabaseClient,
   postId: string
@@ -119,12 +121,12 @@ export async function getVisiblePostById(
   return data ?? null;
 }
 
+/** Inserta una creación usando el cliente autenticado para mantener las políticas RLS activas. */
 export async function createUserPost(
   supabase: AuthenticatedSupabaseClient,
   user: User,
   input: CreatePostInput
 ): Promise<Post> {
-  // Construimos la fila completa en servidor para no depender de campos ocultos en cliente.
   const payload: InsertPost = {
     id: crypto.randomUUID(),
     user_id: user.id,
@@ -134,7 +136,6 @@ export async function createUserPost(
     is_public: input.isPublic
   };
 
-  // La insercion usa el cliente autenticado del usuario, por lo que sigue sometida a RLS.
   const { data, error } = await supabase.from("posts").insert(payload).select("*").single();
 
   if (error) {
@@ -144,6 +145,7 @@ export async function createUserPost(
   return data;
 }
 
+/** Cuenta creaciones ya guardadas desde una fecha para aplicar límites de uso diarios. */
 export async function getUserCreationCountSince(
   supabase: AuthenticatedSupabaseClient,
   userId: string,
@@ -170,6 +172,7 @@ function normalizePromptWord(word: string) {
     .trim();
 }
 
+/** Extrae términos significativos del prompt y descarta palabras poco útiles para hashtags. */
 export function extractPromptTerms(prompt: string, limit = 3) {
   const uniqueTerms = new Set<string>();
 
@@ -190,6 +193,7 @@ export function extractPromptTerms(prompt: string, limit = 3) {
   return Array.from(uniqueTerms);
 }
 
+/** Calcula hashtags de tendencia a partir de la frecuencia de términos en posts públicos. */
 export function buildTrendingTerms(posts: Post[], limit = 6) {
   const counts = new Map<string, number>();
 
@@ -205,6 +209,7 @@ export function buildTrendingTerms(posts: Post[], limit = 6) {
     .map(([term]) => term);
 }
 
+/** Busca posts relacionados mediante coincidencia textual simple sobre el prompt. */
 export async function getPostsByPromptTerm(
   supabase: AuthenticatedSupabaseClient,
   term: string,
@@ -232,6 +237,7 @@ export async function getPostsByPromptTerm(
   return data ?? [];
 }
 
+/** Devuelve recomendaciones recientes cuando no hay suficientes coincidencias por término. */
 export async function getFallbackRecommendedPosts(
   supabase: AuthenticatedSupabaseClient,
   excludePostId?: string,

@@ -12,7 +12,6 @@ import { generateMoodscapeImage } from "@/services/openai/image-generation";
 
 const DAILY_CREATION_LIMIT = 3;
 
-// Utilidad basica para leer valores de formularios HTML sin repetir comprobaciones.
 function getStringValue(value: FormDataEntryValue | null) {
   return typeof value === "string" ? value.trim() : "";
 }
@@ -24,7 +23,6 @@ function getServerDayStartIso() {
   return dayStart.toISOString();
 }
 
-// Los mensajes de la Home privada viajan por query params para mantener la pagina simple.
 function buildDashboardRedirect(
   message: string,
   type: "success" | "error",
@@ -42,12 +40,10 @@ function buildDashboardRedirect(
   return `/?${params.toString()}` as Route;
 }
 
-// Esta accion coordina la generacion con OpenAI, la subida a Storage y la insercion en posts.
+/** Coordina validación, límite diario, OpenAI, Storage y persistencia del post generado. */
 export async function generateImageAction(formData: FormData) {
-  // El guard devuelve tanto el usuario como el cliente autenticado listo para consultar RLS.
   const { supabase, user } = await requireAuthenticatedUser();
 
-  // Extraemos y normalizamos los campos del formulario enviado desde la Home privada.
   const prompt = getStringValue(formData.get("prompt"));
   const isPublic = formData.get("is_public") === "on";
   const promptValidation = validatePrompt(prompt);
@@ -106,7 +102,7 @@ export async function generateImageAction(formData: FormData) {
       try {
         await removeGeneratedImage(supabase, uploadedImagePath);
       } catch {
-        // Si falla la limpieza, priorizamos mostrar el error principal al usuario.
+        // El error principal de generación es más útil para el usuario que un fallo de limpieza.
       }
     }
 

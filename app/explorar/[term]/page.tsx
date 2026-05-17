@@ -28,6 +28,7 @@ export default async function ExploreDetailPage({ params, searchParams }: Explor
   const decodedTerm = decodeURIComponent(term);
   const posts = await getPostsByPromptTerm(supabase, decodedTerm, undefined, 18);
   const publicPosts = await getPublicPosts(supabase, 80);
+  // Reutilizamos las tendencias globales para ofrecer salida lateral desde cada categoría.
   const trends = buildTrendingTerms(publicPosts, 6);
   const isExpanded = resolvedSearchParams.view === "expanded";
 
