@@ -32,7 +32,7 @@ export default function DiscoverMoodscapePage() {
             allowFullScreen
             loading="lazy"
             referrerPolicy="strict-origin-when-cross-origin"
-            src="https://www.youtube.com/embed/kTyfu_yJ5ms"
+            src="https://www.youtube.com/embed/P2h9brR94tQ"
             title="Demo de Moodscape"
           />
         </div>
