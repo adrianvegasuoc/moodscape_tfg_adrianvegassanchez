@@ -50,11 +50,7 @@ export function ExploreOverview({ trends }: ExploreOverviewProps) {
       </section>
 
       {heroTrends.length > 0 ? (
-        <section className="explore-section explore-hero-panel" aria-labelledby="explore-trends-title">
-          <div className="explore-section-heading">
-            <h2 id="explore-trends-title">Tendencias destacadas</h2>
-            <p>Entra en las emociones que más se están compartiendo ahora.</p>
-          </div>
+        <section className="explore-section explore-hero-panel" aria-label="Tendencias visuales">
           <div className="trend-hero-grid">
             {heroTrends.map((trend) => {
               const featuredPost = trend.posts[0];
